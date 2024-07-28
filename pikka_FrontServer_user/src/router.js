@@ -10,6 +10,7 @@ import Profile from "./views/Profile.vue";
 import Write from "./views/Write.vue";
 import History from "./views/History.vue";
 import Inquiry from "./views/Inquiry.vue";
+import Job from "./views/Job.vue";
 
 Vue.use(Router);
 
@@ -26,12 +27,13 @@ export default new Router({
       },
     },
     {
-      path: "/landing",
-      name: "landing",
+      path: "/job",
+      name: "job",
       components: {
         header: AppHeader,
-        default: Landing,
-        footer: AppFooter,
+        default: Job,
+        footer: AppFooter
+    
       },
     },
     {
