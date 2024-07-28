@@ -11,46 +11,17 @@
         <img src="../../public/img/brand/wejob.png" alt="logo" />
       </router-link>
 
-      <base-dropdown tag="li" class="nav-item">
-        <a
-          slot="title"
-          href="#"
-          class="nav-link"
-          data-toggle="dropdown"
-          role="button"
-        >
-          <span class="nav-link-inner--text">취업</span>
-        </a>
-        <router-link to="/job" class="dropdown-item">취업</router-link>
-      </base-dropdown>
 
-      <base-dropdown tag="li" class="nav-item">
-        <a
-          slot="title"
-          href="#"
-          class="nav-link"
-          data-toggle="dropdown"
-          role="button"
-        >
-          <span class="nav-link-inner--text">자격증</span>
-        </a>
+      <div>
 
-        <router-link to="/profile" class="dropdown-item">자격증</router-link>
-      </base-dropdown>
+        <router-link to="/job" class="nav-link">취업</router-link>
 
-      <base-dropdown tag="li" class="nav-item">
-        <a
-          slot="title"
-          href="#"
-          class="nav-link"
-          data-toggle="dropdown"
-          role="button"
-        >
-          <span class="nav-link-inner--text">게시판</span>
-        </a>
+      </div>
+      
+      <router-link to="/certification" class="nav-link">자격증</router-link>
+      <router-link to="/post" class="nav-link">게시판</router-link>
 
-        <router-link to="/login" class="dropdown-item">게시판</router-link>
-      </base-dropdown>
+    
 
       <base-dropdown tag="li" class="nav-item">
         <a

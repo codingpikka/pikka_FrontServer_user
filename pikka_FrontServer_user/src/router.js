@@ -12,6 +12,10 @@ import History from "./views/History.vue";
 import Inquiry from "./views/Inquiry.vue";
 import Job from "./views/Job.vue";
 import HistoryComponent from "./views/components/mypage/HistoryComponent.vue";
+import JobDetail from './views/JobDetail.vue';
+import Certification from "./views/Certification.vue";
+import CertificationDetail from "./views/CertificationDetail.vue";
+import Post from "./views/Post.vue";
 
 Vue.use(Router);
 
@@ -35,14 +39,23 @@ export default new Router({
         default: Job,
         footer: AppFooter
     
-      },
+      }
     },
     {
-      path: "/login",
-      name: "login",
+      path:"/jobdetail",
+      name: "jobDetail",
+      components:{
+        header: AppHeader,
+        default: JobDetail,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/post",
+      name: "post",
       components: {
         header: AppHeader,
-        default: Login,
+        default: Post,
         footer: AppFooter,
       },
     },
@@ -56,11 +69,20 @@ export default new Router({
       },
     },
     {
-      path: "/profile",
-      name: "profile",
+      path: "/certification",
+      name: "certification",
       components: {
         header: AppHeader,
-        default: Profile,
+        default: Certification,
+        footer: AppFooter,
+      },
+    },
+    {
+      path: "/certificationDetail",
+      name: "certificationDetail",
+      components: {
+        header: AppHeader,
+        default: CertificationDetail,
         footer: AppFooter,
       },
     },
