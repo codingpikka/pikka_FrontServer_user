@@ -4,6 +4,8 @@
 
     <JobBanner></JobBanner>
     <JobContent></JobContent>
+    <router-view></router-view>
+
 
     </div>
  
@@ -11,7 +13,8 @@
 
 <script>
 import JobBanner from './components/job/JobBanner.vue';
-import JobContent from './components/job/JobContent.vue'
+import JobContent from './components/job/JobContent.vue';
+
 
 
 export default {
