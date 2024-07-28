@@ -6,7 +6,7 @@
       <div class="row row-grid align-items-center">
         <div class="col-md-6 order-md-2" style="margin-bottom: 10%;">
           <img
-            src="../../../public/img/brand/002501.png"
+            src="../../../../public/img/brand/002501.png"
             class="img-fluid floating"
           />
         </div>

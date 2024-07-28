@@ -8,7 +8,7 @@
         style="border: 0px solid black;margin: 5%; padding: 1%;"  >
         <img
           style="height: 350px; border-radius: 5px; "
-          src="../../../public/img/brand/mainimg.png"
+          src="../../../../public/img/brand/mainimg.png"
           alt="logo"
         />
       </div>
