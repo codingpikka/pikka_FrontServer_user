@@ -21,7 +21,7 @@
         >
           <span class="nav-link-inner--text">취업</span>
         </a>
-        <router-link to="/landing" class="dropdown-item">취업</router-link>
+        <router-link to="/job" class="dropdown-item">취업</router-link>
       </base-dropdown>
 
       <base-dropdown tag="li" class="nav-item">
