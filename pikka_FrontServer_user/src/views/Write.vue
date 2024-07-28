@@ -1,19 +1,25 @@
 <template>
+  <div>
 
-  <Write></Write>
+
+  <WriteComponent></WriteComponent>
+
+
+  </div>
+
     
-    </template>
-    <script>
+ </template>
+<script>
     
-    import Write from './components/mypage/WriteComponent.vue';
+  import WriteComponent from './components/mypage/WriteComponent.vue';
     
     export default {
-      name: "Write",
+      name: "WritePage",
       components: {
-        Write
+        WriteComponent
       }
     };
     
-    </script>
+</script>
     
     

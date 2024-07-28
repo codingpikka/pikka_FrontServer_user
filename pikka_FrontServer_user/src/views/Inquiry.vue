@@ -1,16 +1,21 @@
 <template>
 
-<Inquiry></Inquiry>
+<div>
+
+  <InquiryComponent></InquiryComponent>
+
+</div>
+
   
-  </template>
+</template>
   <script>
   
-  import Inquiry from './components/mypage/InquiryComponent.vue';
+  import InquiryComponent from './components/mypage/InquiryComponent.vue';
   
   export default {
-    name: "Inquiry",
+    name: "InquiryPage",
     components: {
-      Inquiry
+      InquiryComponent
     }
   };
   
