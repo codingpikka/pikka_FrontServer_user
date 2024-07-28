@@ -11,6 +11,7 @@ import Write from "./views/Write.vue";
 import History from "./views/History.vue";
 import Inquiry from "./views/Inquiry.vue";
 import Job from "./views/Job.vue";
+import HistoryComponent from "./views/components/mypage/HistoryComponent.vue";
 
 Vue.use(Router);
 
@@ -83,7 +84,7 @@ export default new Router({
     },
     {
       path: "/history",
-      name: "history",
+      name: "HistoryPage",
       components: {
         header: AppHeader,
         default: History,

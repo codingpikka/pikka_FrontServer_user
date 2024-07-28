@@ -15,7 +15,7 @@ import JobContent from './components/job/JobContent.vue'
 
 
 export default {
-  name: "job",
+  name: "jobPage",
   components: {
     JobBanner,
     JobContent

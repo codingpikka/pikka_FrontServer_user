@@ -1,16 +1,20 @@
 <template>
+  <div>
+    <HistoryComponent></HistoryComponent>
 
-<Histroy></Histroy>
+  </div>
+
 
 </template>
 <script>
 
-import History from './components/mypage/HistoryComponent.vue';
+
+import HistoryComponent from './components/mypage/HistoryComponent.vue';
 
 export default {
-  name: "History",
+  name: "HistoryPage",
   components: {
-    History
+    HistoryComponent
   }
 };
 

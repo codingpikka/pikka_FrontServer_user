@@ -204,6 +204,9 @@ export default {
       totalPages: 5, // 총 페이지 수
     };
   },
+  components: {
+    Card
+  },
   methods: {
     // 버튼을 클릭했을 때 activeButton 상태를 설정하는 메서드
     setActiveButton(button) {
