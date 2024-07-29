@@ -5,6 +5,7 @@
 ### 글쓰기 | post 
 
 - 게시글 id : post_id
+- 게시글 제목 : post_title
 - 이미지 : post_img
 - 설명글 : post_description
 - 내용 : post_content
