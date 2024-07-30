@@ -37,7 +37,7 @@
                             깃허브링크랑 지원서는 0월 0일까지 제출하세용. 이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                             <badge tag="a" type="info">상세보기</badge>
                         
@@ -55,7 +55,7 @@
                         <p class="text-Black mt-3">이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -68,7 +68,7 @@
                         <p class="text-Black mt-3">우아한 형제들에서 올라온 채용공고입니다.풀스택 개발자 뽑고요 정규직이에용
                             깃허브링크랑 지원서는 0월 0일까지 제출하세용. 이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 
                         </p>
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -82,7 +82,7 @@
                         <h5 class="text-Gray mt-3">여기는 자유게시판 관련 제목입니다..</h5>
                         <p class="text-Black mt-3">이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -95,7 +95,7 @@
                         <p class="text-Black mt-3">이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -106,7 +106,7 @@
                         <h5 class="text-Gray mt-3">여기는 자유게시판 관련 제목입니다..</h5>
                         <p class="text-Black mt-3">이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -121,7 +121,7 @@
                         <p class="text-Black mt-3">이거는 취업 관련 내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -133,7 +133,7 @@
                         <p class="text-Black mt-3">이거는 자유게시판  내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     
@@ -146,7 +146,7 @@
                         <p class="text-Black mt-3">이거는 자유게시판  내용이의 일부가 보여지는 곳입니다. 내용의 요약본 또는 설명글을 따로 입력하라고 해야겠다!
                         </p>
 
-                        <router-link to="/jobdetail">
+                        <router-link to="/postdetail">
                         
                         <badge tag="a" type="info">상세보기</badge>
                     

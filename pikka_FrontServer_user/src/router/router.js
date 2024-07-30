@@ -11,6 +11,7 @@ import JobDetail from '../views/JobDetail.vue'; // 경로 수정
 import Certification from "../views/Certification.vue"; // 경로 수정
 import CertificationDetail from "../views/CertificationDetail.vue"; // 경로 수정
 import Post from "../views/Post.vue"; // 경로 수정
+import PostDetail from "../views/PostDetail.vue";
 
 Vue.use(Router);
 
@@ -51,6 +52,15 @@ export default new Router({
         header: AppHeader,
         default: Post,
         footer: AppFooter,
+      },
+    },
+    {
+      path: "/postdetail",
+      name: "postdetail",
+      components: {
+        header: AppHeader,
+        default: PostDetail,
+        footer: AppFooter
       },
     },
     {
