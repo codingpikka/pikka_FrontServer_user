@@ -25,8 +25,6 @@
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                                 <div class="card-profile-actions py-4 mt-lg-0">
-                                    <!-- <base-button type="info" size="sm" class="mr-4">Connect</base-button>
-                                    <base-button type="default" size="sm" class="float-right">Message</base-button> -->
                                   
                                         <br> 
                                         <br>
@@ -35,20 +33,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-1">
-                                <!-- <div class="card-profile-stats d-flex justify-content-center">
-                                    <div>
-                                        <span class="heading">22</span>
-                                        <span class="description">Friends</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">10</span>
-                                        <span class="description">Photos</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">89</span>
-                                        <span class="description">Comments</span>
-                                    </div>
-                                </div> -->
+
                             </div>
                         </div>
                         <div class="text-center mt-5">
@@ -67,21 +52,22 @@
                         <div class="mt-5 py-5 border-top text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9">
-                             
-
-                                   <li>합격자 밢표 종료일자:</li>
                                     
-                                    <li>회차 </li>
+                                
+                                    <li> 자격증명: {{ certName }}</li>
+                                    <li>회차 : {{ certRound }} </li>
 
-                                    <li>원서접수 시작일자</li>
+                                    <li>원서접수 시작일자 : {{ certApplicationStartDate }}</li>
 
-                                    <li>원서접수 종료일자</li>
+                                    <li>원서접수 종료일자 : {{ certApplicationEndDate }}</li>
 
-                                    <li>시험 시작 일자</li>
+                                    <li>시험 시작 일자 : {{ certExamStartDate }}</li>
 
-                                    <li>시험 종료일자</li>
+                                    <li>시험 종료일자 : {{ certExamEndDate }}</li>
 
-                                    <li>합격자발표 시작일자</li>
+                                    <li>합격자발표 시작일자 : {{ certAnnouncementStartDate }}</li>
+
+                                    <li>합격자 밢표 종료일자: {{ certAnnouncementEndDate  }}</li>
 
                                     <br>
                                     <br>
@@ -117,7 +103,47 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
+    data() {
+        return {
+            certName: "",
+            certRound: "",
+            certApplicationStartDate: "",
+            certApplicationEndDate: "",
+            certExamStartDate: "",
+            certExamEndDate: "",
+            certAnnouncementStartDate: "",
+            certAnnouncementEndDate: ""
+        };
+    },
+    mounted() {
+        this.fetchData();
+    },
+    methods: {
+        fetchData() {
+            axios
+                .get("http://localhost:8000/certification")
+                .then((response) => {
+                    const data = response.data[0];
+                    this.certName = data.cert_name;
+                    this.certRound = data.cert_round;
+                    this.certApplicationStartDate = data.cert_application_start_date;
+                    this.certApplicationEndDate = data.cert_application_end_date;
+                    this.certExamStartDate = data.cert_exam_start_date;
+                    this.certExamEndDate = data.cert_exam_end_date;
+                    this.certAnnouncementStartDate = data.cert_announcement_start_date;
+                    this.certAnnouncementEndDate = data.cert_announcement_end_date;
+            
+                })
+                .catch((error) => {
+                    console.error(" 오류냠! ", error);
+                });
+        },
+
+    },
+
 
 };
 </script>

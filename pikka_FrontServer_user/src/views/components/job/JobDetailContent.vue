@@ -25,36 +25,22 @@
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                                 <div class="card-profile-actions py-4 mt-lg-0">
-                                    <!-- <base-button type="info" size="sm" class="mr-4">Connect</base-button>
-                                    <base-button type="default" size="sm" class="float-right">Message</base-button> -->
-                                  
+
                                         <br> 
                                         <br>
-                                        
-
+ 
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-1">
-                                <!-- <div class="card-profile-stats d-flex justify-content-center">
-                                    <div>
-                                        <span class="heading">22</span>
-                                        <span class="description">Friends</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">10</span>
-                                        <span class="description">Photos</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">89</span>
-                                        <span class="description">Comments</span>
-                                    </div>
-                                </div> -->
+                             
                             </div>
                         </div>
                         <div class="text-center mt-5">
-                            <h3>여기는 취업정보 제목입니다    
-                            </h3>
+                             <h3>제목입니다</h3>
                         
+
+
+                             
                         </div>
 
                         <div class="content-detail">
@@ -70,21 +56,23 @@
                                 <div class="col-lg-9">
                              
 
-                                   <li>회사명:</li>
-                                    
-                                    <li>채용정보</li>
-
-                                    <li>임금형태</li>
-
-                                    <li>급여</li>
-
-                                    <li>근무형태</li>
-
-                                    <li>등록일자</li>
-
-                                    <li>마감일자</li>
-
-                                    <li>워크넷 채용정보 URL</li>
+             
+                                    <li>회사명: {{ jobCompanyname }}</li>
+                                    <li>채용정보: {{ jobInfoTitle }}</li>
+                                    <li>임금형태: {{ jobWageType }}</li>
+                                    <li>급여: {{ jobSalary }}</li>
+                                    <li>근무지역: {{ jobLocation }}</li>
+                                    <li>근무형태: {{ jobEmploymentType }}</li>
+                                    <li>등록일자: {{ jobPostedDate }}</li>
+                                    <li>마감일자: {{ jobClosingDate }}</li>
+                                    <li>
+                                        워크넷 웹 채용정보 URL:
+                                        <a :href="jobWebInfoUrl">{{ jobWebInfoUrl }}</a>
+                                    </li>
+                                    <li>
+                                        워크넷 모바일 채용정보 URL:
+                                        <a :href="jobMobileInfoUrl">{{ jobMobileInfoUrl }}</a>
+                                    </li>
 
                                     <br>
                                     <br>
@@ -92,12 +80,7 @@
                                     <br>
                                     <br>
                                     <br>
-
-                                    
-                                    
-
-                                   
-                                </div>
+                             </div>
                             
 
                             </div>
@@ -125,9 +108,53 @@
 </template>
 
 <script>
+import axios from "axios"
+
 export default {
+    data() {
+        return {
+            jobCompanyname: "",
+            jobInfoTitle: "",
+            jobWageType: "",
+            jobSalary: "",
+            jobLocation: "",
+            jobEmploymentType: "",
+            jobPostedDate: "",
+            jobClosingDate: "",
+            jobWebInfoUrl: "",
+            jobMobileInfoUrl: "",
+
+        }
+    },
+    mounted(){
+        this.fetchData();
+    },
+    methods: {
+        fetchData(){
+            axios
+            .get("http://localhost:8000/jobdetail")
+            .then((response) => {
+                const data = response.data[0];
+                this.jobCompanyName = data.job_company_name;
+                this.jobInfoTitle = data.job_info_title;
+                this.jobWageType = data.job_wage_type;
+                this.jobSalary = data.job_salary;
+                this.jobLocation = data.job_location;
+                this.jobEmploymentType = data.job_employment_type;
+                this.jobPostedDate = data.job_posted_date;
+                this.jobClosingDate = data.job_closing_date;
+                this.jobWebInfoUrl = data.job_web_info_url;
+                this.jobMobileInfoUrl = data.job_mobile_info_url;
+
+            })
+            .catch((error) => {
+                console.error("There was an error fetching the data!", error);
+            });
+        },
+    },
 
 };
+
 </script>
 <style>
 .content-detail {

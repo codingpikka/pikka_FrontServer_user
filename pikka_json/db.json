@@ -1,0 +1,40 @@
+{
+    "jobdetail" : [
+        {
+            "job_id": "1",
+            "job_company_name": "ABC Corporation",
+            "job_info_title": "Software Engineer",
+            "job_wage_type": "Monthly",
+            "job_salary": "5000 USD",
+            "job_location": "Seoul, South Korea",
+            "job_employment_type": "Full-time",
+            "job_posted_date": "2024-07-01",
+            "job_closing_date": "2024-07-31",
+            "job_web_info_url": "https://www.work.go.kr/jobwebinfo",
+            "job_mobile_info_url": "https://m.work.go.kr/jobwebinfo"
+
+          }
+
+    ],
+    "certification" : [
+        
+        {
+        "cert_id": "1",
+        "cert_name" : "sqld자격시험",
+        "cert_round": "1",
+        "cert_application_start_date": "2024-08-01",
+        "cert_application_end_date": "2024-08-15",
+        "cert_exam_start_date": "2024-09-01",
+        "cert_exam_end_date": "2024-09-05",
+        "cert_announcement_start_date": "2024-09-20",
+        "cert_announcement_end_date": "2024-09-25"
+        }
+              
+
+
+        
+    ]
+
+
+
+}
