@@ -1,19 +1,9 @@
+
 <template>
   <section
     class="section section-shaped section-lg my-0"
     style="background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);"
   >
-    <div class="shape shape-style-1 bg-gradient-default">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
     <div class="container pt-lg-md">
       <div class="row justify-content-center">
         <div class="col-lg-12">
@@ -51,140 +41,37 @@
                 <!-- 작성내역 섹션 -->
                 <div v-if="activeButton === '작성내역'" class="info-section">
                   <div class="info-row_header">
-                    <div class="info-title">제목</div>
-                    <div class="info-date">등록일</div>
-                    <div class="info-category">댓글수</div>
+                    <div class="info-title">id</div>
+                    <div class="info-thumbnail">날짜</div>
+                    <div class="info-background">제목</div>
                   </div>
 
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div class="info-category">12</div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div class="info-category">12</div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div class="info-category">12</div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div class="info-category">12</div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div class="info-category">12</div>
+                  <div v-for="item in data" :key="item.id" class="info-row">
+                    <p>썸네일: {{ item.thumbnail }}</p>
+                    <p>배경: {{ item.background }}</p>
+                    <p>내용: {{ item.content }}</p>
                   </div>
                 </div>
 
                 <!-- 문의내역 섹션 -->
-                <div v-if="activeButton === '문의내역'" class="info-section">
+                <!-- <div v-if="activeButton === '문의내역'" class="info-section">
                   <div class="info-row_header">
                     <div class="info-title">제목</div>
                     <div class="info-date">등록일</div>
                     <div class="info-category">카테고리</div>
                   </div>
 
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
+                  <div v-for="item in inquiryItems" :key="item.id" class="info-row">
+                    <div class="info-title">{{ item.title }}</div>
+                    <div class="info-date">{{ item.date }}</div>
                     <div
                       class="info-category"
-                      style="
-                          background-color: #f0f0f0;
-                          border: 2px solid #ff3708;
-                          color: #ff3708;"
+                      :style="getCategoryStyle(item.category)"
                     >
-                      기타
+                      {{ item.category }}
                     </div>
                   </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div
-                      class="info-category"
-                      style="
-                          background-color: #f0f0f0;
-                          border: 2px solid #ff3708;
-                          color: #ff3708;"
-                    >
-                      기타
-                    </div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div
-                      class="info-category"
-                      style=" background-color: #f0f0f0;
-                          border: 2px solid #21AF71;
-                          color: #21AF71;"
-                    >
-                      자격증
-                    </div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div
-                      class="info-category"
-                      style=" 
-                          background-color: #f0f0f0;
-                          border: 2px solid #28B1CD;
-                          color: #28B1CD;"
-                    >
-                      취업
-                    </div>
-                  </div>
-
-                  <div class="info-row">
-                    <div class="info-title">여기는 바로 제목 입니다</div>
-                    <div class="info-date">2024-00-00</div>
-                    <div
-                      class="info-category"
-                      style=" 
-                          background-color: #f0f0f0;
-                          border: 2px solid #28B1CD;
-                          color: #28B1CD;"
-                    >
-                      취업
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 페이지네이션 -->
-                <div v-if="activeButton" class="pagination">
-                  <span
-                    @click="prevPage"
-                    :class="{ disabled: currentPage === 1 }"
-                    >&lt;</span
-                  >
-                  <span
-                    v-for="page in totalPages"
-                    :key="page"
-                    @click="setPage(page)"
-                    :class="{ active: currentPage === page }"
-                    >{{ page }}</span
-                  >
-                  <span
-                    @click="nextPage"
-                    :class="{ disabled: currentPage === totalPages }"
-                    >&gt;</span
-                  >
-                </div>
+                </div> -->
               </form>
             </template>
           </Card>
@@ -194,49 +81,44 @@
   </section>
 </template>
 <script>
+import axios from 'axios';
 import Card from '../../../components/Card.vue';
 
 export default {
   data() {
     return {
-      activeButton: "", // 현재 활성화된 버튼 (작성내역 또는 문의내역)
-      currentPage: 1, // 현재 페이지
-      totalPages: 5, // 총 페이지 수
+      data: [],
+      activeButton: '작성내역', // 초기값 설정
+
     };
   },
   components: {
     Card
   },
   methods: {
-    // 버튼을 클릭했을 때 activeButton 상태를 설정하는 메서드
+    async fetchData() {
+      try {
+        const response = await axios.get('http://localhost:8003/data');
+        this.data = response.data; // JSON 데이터 저장
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
     setActiveButton(button) {
       this.activeButton = button;
-      this.currentPage = 1; // 버튼을 클릭할 때마다 페이지를 1로 초기화
+      this.currentPage = 1; // 페이지를 1로 초기화
+      this.fetchData();
     },
-    // 페이지를 설정하는 메서드
-    setPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
-    // 이전 페이지로 이동하는 메서드
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    },
-    // 다음 페이지로 이동하는 메서드
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
-    },
+
+
   },
+
 };
 </script>
 
+
 <style>
-.category-btn:hover {
+.comments-btn:hover {
   background-color: #e0e0e0;
 }
 
@@ -267,6 +149,7 @@ export default {
 .info-section {
   margin-top: 20px;
 }
+
 .info-row_header {
   display: flex;
   justify-content: space-between;
@@ -276,6 +159,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
 }
+
 .info-row {
   height: 120px;
   display: flex;
@@ -293,12 +177,12 @@ export default {
   text-align: center;
 }
 
-.info-date {
+.info-thumbnail {
   flex: 2;
   text-align: center;
 }
 
-.info-category {
+.info-background {
   flex: 2;
   text-align: center;
 }
@@ -308,18 +192,22 @@ export default {
   justify-content: center;
   margin-top: 20px;
 }
+
 .pagination span {
   margin: 0 5px;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .pagination span.disabled {
   cursor: not-allowed;
   color: #ccc;
 }
+
 .pagination span.active {
   background-color: #3fa2f6;
   color: white;
 }
+
 </style>
