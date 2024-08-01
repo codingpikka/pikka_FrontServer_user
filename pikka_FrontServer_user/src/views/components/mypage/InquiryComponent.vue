@@ -3,22 +3,8 @@
     class="section section-shaped section-lg my-0"
     style="background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);"
   >
-    <div class="shape shape-style-1 bg-gradient-default">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
     <div class="container pt-lg-md">
-      <div
-        class=""
-        style="display: flex; justify-content: center; padding: 20px; font-size: 30px;"
-      >
+      <div class="text-center" style="padding: 20px; font-size: 30px;">
         문의하기
       </div>
       <div class="row justify-content-center">
@@ -30,76 +16,140 @@
             class="border"
             style="width: 100%; height: 1000px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);"
           >
-            <template>
-              <form role="form">
-                <base-input
-                  alternative
-                  class="mb-3"
-                  placeholder="제목"
-                ></base-input>
-                <div
-                  class="category-section"
-                  style="
-                  margin: 10px;
-                  display: inline-block;
-                  background-color: #f9f9f9;
-                  font-size: 20px;
-                  "
-                >
-                  카테고리
-                </div>
-                <base-button
-                  type="neutral"
-                  class="category-btn"
-                  style=" background-color: #f0f0f0;
-                  border: 2px solid #21AF71;
-                  color: #21AF71;"
-                  >자격증</base-button
-                >
-                <base-button
-                  type="neutral"
-                  class="category-btn"
-                  style=" background-color: #f0f0f0;
-                  border: 2px solid #28B1CD;
-                  color: #28B1CD;"
-                  >취업</base-button
-                >
-                <base-button
-                  type="neutral"
-                  class="category-btn"
-                  style=" background-color: #f0f0f0;
-                  border: 2px solid #FF3708;
-                  color: #FF3708;"
-                  >기타</base-button
-                >
-                <base-input
-                  alternative
-                  type="file"
-                  class="mb-3 mt-3"
-                  placeholder="첨부파일"
-                ></base-input>
-                <div style="border-bottom: 0.3px solid gray;"></div>
-                <textarea
+            <form @submit.prevent="submitData" role="form">
+              <div class="form-group">
+                <input
+                  v-model="form.title"
+                  type="text"
                   class="form-control mb-3"
-                  placeholder="내용"
-                  style="height: 700px; width: 100%; margin-top: 15px;"
-                ></textarea>
-                <div class="text-center">
-                  <base-button type="primary" style="background-color: #0ECDEF;"
-                    >등록하기</base-button
-                  >
-                </div>
-              </form>
-            </template>
+                  placeholder="제목"
+                />
+              </div>
+              <div class="category-section">
+                카테고리
+              </div>
+              <button
+                type="button"
+                class="category-btn"
+                @click="selectCategory('자격증')"
+                :style="getButtonStyle('자격증')"
+              >자격증</button>
+              <button
+                type="button"
+                class="category-btn"
+                @click="selectCategory('취업')"
+                :style="getButtonStyle('취업')"
+              >취업</button>
+              <button
+                type="button"
+                class="category-btn"
+                @click="selectCategory('기타')"
+                :style="getButtonStyle('기타')"
+              >기타</button>
+              <div style="border-bottom: 0.3px solid gray;"></div>
+              <textarea
+                v-model="form.content"
+                class="form-control mb-3"
+                placeholder="내용"
+                style="height: 700px; width: 100%; margin-top: 15px;"
+              ></textarea>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary" style="background-color: #0ECDEF;">
+                  등록하기
+                </button>
+              </div>
+            </form>
           </card>
         </div>
       </div>
     </div>
   </section>
 </template>
+
 <script>
+import axios from 'axios';
 
+export default {
+  data() {
+    return {
+      selectedCategory: '',
+      form: {
+        title: '',
+        content: ''
+      },
+      message: '',
+      messageType: ''
+    };
+  },
+  methods: {
+    selectCategory(category) {
+      this.selectedCategory = category;
+    },
+    getButtonStyle(category) {
+      const isSelected = this.selectedCategory === category;
+      let baseStyle = `
+        background-color: #f0f0f0;
+        border: 2px solid;
+        color: black;
+      `;
+      switch (category) {
+        case '자격증':
+          baseStyle += ' border-color: #21AF71;';
+          if (isSelected) baseStyle += ' background-color: #21AF71; color: #fff;';
+          else baseStyle += ' color: #21AF71;';
+          break;
+        case '취업':
+          baseStyle += ' border-color: #28B1CD;';
+          if (isSelected) baseStyle += ' background-color: #28B1CD; color: #fff;';
+          else baseStyle += ' color: #28B1CD;';
+          break;
+        case '기타':
+          baseStyle += ' border-color: #FF3708;';
+          if (isSelected) baseStyle += ' background-color: #FF3708; color: #fff;';
+          else baseStyle += ' color: #FF3708;';
+          break;
+      }
+      return baseStyle;
+    },
+    async submitData() {
+      const newData = {
+        title: this.form.title,
+        category: this.selectedCategory,
+        content: this.form.content
+      };
 
-export default {};
+      try {
+      const response = await axios.post('http://localhost:8003/inquiry', newData);
+      // 성공 시 alert 메시지 표시
+      alert('작성 완료!');
+      this.$router.push('/history');
+      this.resetForm();
+      } catch (error) {
+        // 오류 시 alert 메시지 표시
+        alert('작성 실패! 다시 입력해주세요!');
+        console.error('제출 오류:', error.response ? error.response.data : error.message);
+      }
+    },
+    resetForm() {
+      this.form = {
+        title: '',
+        content: ''
+      };
+      this.selectedCategory = '';
+    }
+  }
+};
 </script>
-<style></style>
+
+<style scoped>
+.category-section {
+  margin: 10px;
+  display: inline-block;
+  background-color: #f9f9f9;
+  font-size: 20px;
+}
+
+.category-btn {
+  margin: 5px;
+}
+</style>
