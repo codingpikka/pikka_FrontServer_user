@@ -45,36 +45,10 @@
                     <div class="info-background">제목</div>
                   </div>
 
-                  <div v-for="item in paginatedData" :key="item.id" class="info-row">
+                  <div v-for="item in data" :key="item.id" class="info-row">
                     <p>썸네일: {{ item.thumbnail }}</p>
                     <p>배경: {{ item.background }}</p>
                     <p>내용: {{ item.content }}</p>
-                  </div>
-
-                  <!-- 페이지네이션 버튼 -->
-                  <div class="pagination">
-                    <span
-                      v-if="currentPage > 1"
-                      @click="changePage(currentPage - 1)"
-                      class="pagination-btn"
-                    >
-                      &lt;
-                    </span>
-                    <span
-                      v-for="page in totalPages"
-                      :key="page"
-                      @click="changePage(page)"
-                      :class="{ 'pagination-btn': true, active: currentPage === page }"
-                    >
-                      {{ page }}
-                    </span>
-                    <span
-                      v-if="currentPage < totalPages"
-                      @click="changePage(currentPage + 1)"
-                      class="pagination-btn"
-                    >
-                      &gt;
-                    </span>
                   </div>
                 </div>
 
@@ -86,7 +60,7 @@
                     <div class="info-category">카테고리</div>
                   </div>
 
-                  <div v-for="item in paginatedInquiries" :key="item.id" class="info-row">
+                  <div v-for="item in inquiryItems" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-date">{{ item.date }}</div>
                     <div
@@ -95,32 +69,6 @@
                     >
                       {{ item.category }}
                     </div>
-                  </div>
-
-                  <!-- 페이지네이션 버튼 -->
-                  <div class="pagination">
-                    <span
-                      v-if="currentInquiryPage > 1"
-                      @click="changeInquiryPage(currentInquiryPage - 1)"
-                      class="pagination-btn"
-                    >
-                      &lt;
-                    </span>
-                    <span
-                      v-for="page in totalInquiryPages"
-                      :key="page"
-                      @click="changeInquiryPage(page)"
-                      :class="{ 'pagination-btn': true, active: currentInquiryPage === page }"
-                    >
-                      {{ page }}
-                    </span>
-                    <span
-                      v-if="currentInquiryPage < totalInquiryPages"
-                      @click="changeInquiryPage(currentInquiryPage + 1)"
-                      class="pagination-btn"
-                    >
-                      &gt;
-                    </span>
                   </div>
                 </div>
               </form>
@@ -132,6 +80,7 @@
   </section>
 </template>
 
+
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -139,42 +88,23 @@ import Card from '../../../components/Card.vue';
 export default {
   data() {
     return {
-      data: [], // 작성내역 데이터
-      inquiryItems: [], // 문의내역 데이터
-      activeButton: '작성내역', // 활성화된 버튼
-      currentPage: 1, // 현재 페이지
-      itemsPerPage: 5, // 페이지당 항목 수
-      totalPages: 1, // 총 페이지 수
-      currentInquiryPage: 1, // 현재 문의내역 페이지
-      totalInquiryPages: 1 // 총 문의내역 페이지 수
+      data: [],           // 작성내역 데이터를 저장
+      inquiryItems: [],   // 문의내역 데이터를 저장
+      activeButton: '작성내역' // 기본으로 활성화된 버튼
     };
   },
   components: {
     Card
-  },
-  computed: {
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.data.slice(start, end);
-    },
-    paginatedInquiries() {
-      const start = (this.currentInquiryPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.inquiryItems.slice(start, end);
-    }
   },
   methods: {
     async fetchData() {
       try {
         if (this.activeButton === '작성내역') {
           const response = await axios.get('http://localhost:8003/data');
-          this.data = response.data;
-          this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
+          this.data = response.data; // 작성내역 데이터 저장
         } else if (this.activeButton === '문의내역') {
-          const response = await axios.get('http://localhost:8003/inquiries');
-          this.inquiryItems = response.data;
-          this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.itemsPerPage);
+          const response = await axios.get('http://localhost:8003/inquiry');
+          this.inquiryItems = response.data; // 문의내역 데이터 저장
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -182,27 +112,26 @@ export default {
     },
     setActiveButton(button) {
       this.activeButton = button;
-      this.fetchData();
+      this.fetchData(); // 버튼 클릭 시 데이터 가져오기
     },
-    changePage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
-    changeInquiryPage(page) {
-      if (page >= 1 && page <= this.totalInquiryPages) {
-        this.currentInquiryPage = page;
+    getCategoryStyle(category) {
+      switch (category) {
+        case '자격증':
+          return 'color: #21AF71;'; // 카테고리별 스타일
+        case '취업':
+          return 'color: #28B1CD;';
+        case '기타':
+          return 'color: #FF3708;';
+        default:
+          return 'color: #000;';
       }
     }
   },
   mounted() {
-    this.fetchData();
+    this.fetchData(); // 초기 로드 시 데이터 가져오기
   }
 };
 </script>
-
-
-
 
 
 <style>
@@ -287,21 +216,20 @@ export default {
   margin-top: 20px;
 }
 
-.pagination-btn {
+.pagination span {
   margin: 0 5px;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.pagination-btn.active {
+.pagination span.disabled {
+  cursor: not-allowed;
+  color: #ccc;
+}
+
+.pagination span.active {
   background-color: #3fa2f6;
   color: white;
 }
-
-.pagination-btn:hover {
-  background-color: #e0e0e0;
-}
-
 </style>
-
