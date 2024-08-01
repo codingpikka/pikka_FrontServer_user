@@ -20,12 +20,30 @@
             faster. You can change the text and images and you're good to go.
           </p>
 
+          <router-link to="/certificationDetail">
+                        
+            <badge tag="a" type="info">상세보기</badge>
+                    
+          </router-link>
+          
+          
+          <br>
+          <br>
+
+
           <h4>제목</h4>
           <p>
             The kit comes with three pre-built pages to help you get started
             faster. You can change the text and images and you're good to go.
           </p>
-        </div>
+
+          <router-link to="/certificationDetail">
+                        
+              <badge tag="a" type="info">상세보기</badge>
+                    
+           </router-link>
+        
+          </div>
       </div>
     </div>
   </div>
