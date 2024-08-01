@@ -1,4 +1,3 @@
-
 <template>
   <section
     class="section section-shaped section-lg my-0"
@@ -46,22 +45,48 @@
                     <div class="info-background">제목</div>
                   </div>
 
-                  <div v-for="item in data" :key="item.id" class="info-row">
+                  <div v-for="item in paginatedData" :key="item.id" class="info-row">
                     <p>썸네일: {{ item.thumbnail }}</p>
                     <p>배경: {{ item.background }}</p>
                     <p>내용: {{ item.content }}</p>
                   </div>
+
+                  <!-- 페이지네이션 버튼 -->
+                  <div class="pagination">
+                    <span
+                      v-if="currentPage > 1"
+                      @click="changePage(currentPage - 1)"
+                      class="pagination-btn"
+                    >
+                      &lt;
+                    </span>
+                    <span
+                      v-for="page in totalPages"
+                      :key="page"
+                      @click="changePage(page)"
+                      :class="{ 'pagination-btn': true, active: currentPage === page }"
+                    >
+                      {{ page }}
+                    </span>
+                    <span
+                      v-if="currentPage < totalPages"
+                      @click="changePage(currentPage + 1)"
+                      class="pagination-btn"
+                    >
+                      &gt;
+                    </span>
+                  </div>
                 </div>
 
                 <!-- 문의내역 섹션 -->
-                <!-- <div v-if="activeButton === '문의내역'" class="info-section">
+                <div v-if="activeButton === '문의내역'" class="info-section">
                   <div class="info-row_header">
                     <div class="info-title">제목</div>
                     <div class="info-date">등록일</div>
                     <div class="info-category">카테고리</div>
                   </div>
 
-                  <div v-for="item in inquiryItems" :key="item.id" class="info-row">
+                  <div v-for="item in paginatedInquiries" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-date">{{ item.date }}</div>
                     <div
@@ -71,7 +96,33 @@
                       {{ item.category }}
                     </div>
                   </div>
-                </div> -->
+
+                  <!-- 페이지네이션 버튼 -->
+                  <div class="pagination">
+                    <span
+                      v-if="currentInquiryPage > 1"
+                      @click="changeInquiryPage(currentInquiryPage - 1)"
+                      class="pagination-btn"
+                    >
+                      &lt;
+                    </span>
+                    <span
+                      v-for="page in totalInquiryPages"
+                      :key="page"
+                      @click="changeInquiryPage(page)"
+                      :class="{ 'pagination-btn': true, active: currentInquiryPage === page }"
+                    >
+                      {{ page }}
+                    </span>
+                    <span
+                      v-if="currentInquiryPage < totalInquiryPages"
+                      @click="changeInquiryPage(currentInquiryPage + 1)"
+                      class="pagination-btn"
+                    >
+                      &gt;
+                    </span>
+                  </div>
+                </div>
               </form>
             </template>
           </Card>
@@ -80,6 +131,7 @@
     </div>
   </section>
 </template>
+
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -87,32 +139,65 @@ import Card from '../../../components/Card.vue';
 export default {
   data() {
     return {
-      data: [],
-      activeButton: '작성내역', // 초기값 설정
-
+      data: [], // 작성내역 데이터
+      inquiryItems: [], // 문의내역 데이터
+      activeButton: '작성내역', // 활성화된 버튼
+      currentPage: 1, // 현재 페이지
+      itemsPerPage: 5, // 페이지당 항목 수
+      totalPages: 1, // 총 페이지 수
+      currentInquiryPage: 1, // 현재 문의내역 페이지
+      totalInquiryPages: 1 // 총 문의내역 페이지 수
     };
   },
   components: {
     Card
   },
+  computed: {
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.data.slice(start, end);
+    },
+    paginatedInquiries() {
+      const start = (this.currentInquiryPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.inquiryItems.slice(start, end);
+    }
+  },
   methods: {
     async fetchData() {
       try {
-        const response = await axios.get('http://localhost:8003/data');
-        this.data = response.data; // JSON 데이터 저장
+        if (this.activeButton === '작성내역') {
+          const response = await axios.get('http://localhost:8003/data');
+          this.data = response.data;
+          this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
+        } else if (this.activeButton === '문의내역') {
+          const response = await axios.get('http://localhost:8003/inquiries');
+          this.inquiryItems = response.data;
+          this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.itemsPerPage);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
     setActiveButton(button) {
       this.activeButton = button;
-      this.currentPage = 1; // 페이지를 1로 초기화
       this.fetchData();
     },
-
-
+    changePage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    },
+    changeInquiryPage(page) {
+      if (page >= 1 && page <= this.totalInquiryPages) {
+        this.currentInquiryPage = page;
+      }
+    }
   },
-
+  mounted() {
+    this.fetchData();
+  }
 };
 </script>
 
@@ -121,10 +206,6 @@ export default {
 
 
 <style>
-.comments-btn:hover {
-  background-color: #e0e0e0;
-}
-
 .header-buttons {
   margin-bottom: 20px;
 }
@@ -190,27 +271,37 @@ export default {
   text-align: center;
 }
 
+.info-date {
+  flex: 2;
+  text-align: center;
+}
+
+.info-category {
+  flex: 3;
+  text-align: center;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.pagination span {
+.pagination-btn {
   margin: 0 5px;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.pagination span.disabled {
-  cursor: not-allowed;
-  color: #ccc;
-}
-
-.pagination span.active {
+.pagination-btn.active {
   background-color: #3fa2f6;
   color: white;
 }
 
+.pagination-btn:hover {
+  background-color: #e0e0e0;
+}
+
 </style>
+
