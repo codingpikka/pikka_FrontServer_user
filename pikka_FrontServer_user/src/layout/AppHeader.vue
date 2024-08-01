@@ -39,7 +39,7 @@
         </a>
         <router-link to="/write" class="dropdown-item">글쓰기</router-link>
         <router-link to="/inquiry" class="dropdown-item">문의하기</router-link>
-        <router-link to="/history" class="dropdown-item">문의내역</router-link>
+        <router-link to="/history" class="dropdown-item">마이페이지</router-link>
       </base-dropdown>
 
       <!-- <base-dropdown tag="li" class="nav-item">
