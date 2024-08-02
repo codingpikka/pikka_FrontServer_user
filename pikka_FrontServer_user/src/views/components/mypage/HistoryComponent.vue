@@ -1,4 +1,3 @@
-
 <template>
   <section
     class="section section-shaped section-lg my-0"
@@ -54,7 +53,7 @@
                 </div>
 
                 <!-- 문의내역 섹션 -->
-                <!-- <div v-if="activeButton === '문의내역'" class="info-section">
+                <div v-if="activeButton === '문의내역'" class="info-section">
                   <div class="info-row_header">
                     <div class="info-title">제목</div>
                     <div class="info-date">등록일</div>
@@ -71,7 +70,7 @@
                       {{ item.category }}
                     </div>
                   </div>
-                </div> -->
+                </div>
               </form>
             </template>
           </Card>
@@ -80,6 +79,8 @@
     </div>
   </section>
 </template>
+
+
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -87,9 +88,9 @@ import Card from '../../../components/Card.vue';
 export default {
   data() {
     return {
-      data: [],
-      activeButton: '작성내역', // 초기값 설정
-
+      data: [],           // 작성내역 데이터를 저장
+      inquiryItems: [],   // 문의내역 데이터를 저장
+      activeButton: '작성내역' // 기본으로 활성화된 버튼
     };
   },
   components: {
@@ -98,33 +99,42 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await axios.get('http://localhost:8003/data');
-        this.data = response.data; // JSON 데이터 저장
+        if (this.activeButton === '작성내역') {
+          const response = await axios.get('http://localhost:8003/data');
+          this.data = response.data; // 작성내역 데이터 저장
+        } else if (this.activeButton === '문의내역') {
+          const response = await axios.get('http://localhost:8003/inquiry');
+          this.inquiryItems = response.data; // 문의내역 데이터 저장
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
     setActiveButton(button) {
       this.activeButton = button;
-      this.currentPage = 1; // 페이지를 1로 초기화
-      this.fetchData();
+      this.fetchData(); // 버튼 클릭 시 데이터 가져오기
     },
-
-
+    getCategoryStyle(category) {
+      switch (category) {
+        case '자격증':
+          return 'color: #21AF71;'; // 카테고리별 스타일
+        case '취업':
+          return 'color: #28B1CD;';
+        case '기타':
+          return 'color: #FF3708;';
+        default:
+          return 'color: #000;';
+      }
+    }
   },
-
+  mounted() {
+    this.fetchData(); // 초기 로드 시 데이터 가져오기
+  }
 };
 </script>
 
 
-
-
-
 <style>
-.comments-btn:hover {
-  background-color: #e0e0e0;
-}
-
 .header-buttons {
   margin-bottom: 20px;
 }
@@ -190,6 +200,16 @@ export default {
   text-align: center;
 }
 
+.info-date {
+  flex: 2;
+  text-align: center;
+}
+
+.info-category {
+  flex: 3;
+  text-align: center;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -212,5 +232,4 @@ export default {
   background-color: #3fa2f6;
   color: white;
 }
-
 </style>
