@@ -2,7 +2,7 @@
 
 ## 필요한 데이터 정리
 
-### 글쓰기 | post 
+### 글쓰기 | tbl_post 
 
 - 게시글 id : post_id
 - 게시글 제목 : post_title
@@ -10,7 +10,7 @@
 - 설명글 : post_description
 - 내용 : post_content
 
-### 자격증 | certification
+### 자격증 | tbl_certification
 
 - 자격증 ID : cert_id
 - 회차 : cert_round
@@ -22,7 +22,7 @@
 - 합격자 발표 종료일자 : cert_announcement_end_date
 
 
-### 취업 | job
+### 취업 | tbl_job
 
 - 취업정보 ID : job_id
 - 회사명 : job_company_name
@@ -37,7 +37,7 @@
 - 워크넷 모바일 채용정보 URL : job_mobile_info_url
 
 
-### 문의 | contact
+### 문의 | tbl_contact
 
 - 문의하기 ID : contact_id
 - 유저 ID : user_id
@@ -53,7 +53,7 @@
 - 답변상태 : response_status
 
 
-### 공지 | notification
+### 공지 | tbl_notification
 
 - 공지 ID : noti_id
 - 운영자 ID : admin_id
@@ -66,18 +66,18 @@
 - 공지 수정일자 : noti_modi_date
 
 
-### 유저 | user
+### 유저 | tbl_user
 - 유저 ID : user_id
 - 유저 이름 : user_name
 - 추가예정...
 
-### 운영자 | admin
+### 운영자 | tbl_admin
 - 운영자 ID : admin_id
 - 운영자 이름 : admin_name
 - 추가예정...
 
 
-### 댓글 | comments
+### 댓글 | tbl_comments
 
 
 
