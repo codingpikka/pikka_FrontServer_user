@@ -17,18 +17,6 @@
 </template>
 
 <script setup>
-// import { FadeTransition } from "vue2-transitions";
-
-// export default {
-//   components: {
-//     FadeTransition,
-//     methods: {
-//       handler : ()=>{
-//         console.log("dfdf")
-//       }
-//     },
-//   }
-// };
 
 
 const handler = () =>{

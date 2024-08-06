@@ -1,7 +1,7 @@
 <template>
     <div class="profile-page">
         <section class="section-profile-cover section-shaped my-0">
-            <div class="shape shape-style-1 shape-primary shape-skew alpha-4"style="background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);">
+            <div class="shape shape-style-1 shape-primary shape-skew alpha-4" style="background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);">
             </div>
         </section>
         <section class="section section-skew">
