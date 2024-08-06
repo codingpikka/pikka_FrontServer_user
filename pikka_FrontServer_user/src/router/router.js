@@ -16,6 +16,7 @@ import PostDetail from "../views/PostDetail.vue";
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history', // 해시 모드에서 히스토리 모드로 변경
   linkExactActiveClass: "active",
   routes: [
     {
