@@ -40,14 +40,14 @@
                 <!-- 작성내역 섹션 -->
                 <div v-if="activeButton === '작성내역'" class="info-section">
                   <div class="info-row_header">
-                    <div class="info-title">id</div>
-                    <div class="info-thumbnail">날짜</div>
-                    <div class="info-background">제목</div>
+                    <div class="info-title">제목</div>
+                    <div class="info-thumbnail">썸네일</div>
+                    <div class="info-content">내용</div>
                   </div>
 
                   <div v-for="item in data" :key="item.id" class="info-row">
+                    <p>제목: {{ item.title }}</p>
                     <p>썸네일: {{ item.thumbnail }}</p>
-                    <p>배경: {{ item.background }}</p>
                     <p>내용: {{ item.content }}</p>
                   </div>
                 </div>
@@ -80,7 +80,6 @@
   </section>
 </template>
 
-
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -100,10 +99,10 @@ export default {
     async fetchData() {
       try {
         if (this.activeButton === '작성내역') {
-          const response = await axios.get('http://localhost:8003/data');
+          const response = await axios.get('http://localhost:8083/api/post');
           this.data = response.data; // 작성내역 데이터 저장
         } else if (this.activeButton === '문의내역') {
-          const response = await axios.get('http://localhost:8003/inquiry');
+          const response = await axios.get('http://localhost:8083/insert/qna-list');
           this.inquiryItems = response.data; // 문의내역 데이터 저장
         }
       } catch (error) {
@@ -195,8 +194,8 @@ export default {
   text-align: center;
 }
 
-.info-background {
-  flex: 2;
+.info-content {
+  flex: 3;
   text-align: center;
 }
 
