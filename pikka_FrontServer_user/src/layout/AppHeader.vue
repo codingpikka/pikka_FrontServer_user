@@ -42,73 +42,16 @@
         <router-link to="/history" class="dropdown-item">마이페이지</router-link>
       </base-dropdown>
 
-      <!-- <base-dropdown tag="li" class="nav-item">
-        <a
-          slot="title"
-          href="#"
-          class="nav-link"
-          data-toggle="dropdown"
-          role="button"
-        >
-          <span class="nav-link-inner--text"></span>
-        </a>
-
-      
-        
-        
-        <router-link to="/register" class="dropdown-item">??관리자??로그인??</router-link>
-      </base-dropdown> -->
-
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
         <li class="nav-item">
           <a
-            class="nav-link nav-link-icon"
-            href="https://www.facebook.com/creativetim"
-            target="_blank"
-            rel="noopener"
-            data-toggle="tooltip"
-            title="Like us on Facebook"
+            
+            href="http://localhost:5173/"
+            title="admin"
           >
-            <i class="fa fa-facebook-square"></i>
-            <span class="nav-link-inner--text d-lg-none"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link nav-link-icon"
-            href="https://www.instagram.com/creativetimofficial"
-            target="_blank"
-            rel="noopener"
-            data-toggle="tooltip"
-            title="Follow us on Instagram"
-          >
-            <i class="fa fa-instagram"></i>
-            <span class="nav-link-inner--text d-lg-none"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link nav-link-icon"
-            href="https://twitter.com/creativetim"
-            target="_blank"
-            rel="noopener"
-            data-toggle="tooltip"
-            title="Follow us on Twitter"
-          >
-            <i class="fa fa-twitter-square"></i>
-            <span class="nav-link-inner--text d-lg-none"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link nav-link-icon"
-            href="https://github.com/creativetimofficial/vue-argon-design-system"
-            target="_blank"
-            rel="noopener"
-            data-toggle="tooltip"
-            title="Star us on Github"
-          >
-            <i class="fa fa-github"></i>
+            <div style="width: 50px;height: 50px;">
+            <img src="https://image.fmkorea.com/files/attach/new/20200708/486616/2833571032/2979847802/2143cf95b9a0ffdd7f0ee7ac24930063.jpg" style="width: 100%;height: auto;  border-radius: 8px;">
+            </div>
             <span class="nav-link-inner--text d-lg-none"></span>
           </a>
         </li>
