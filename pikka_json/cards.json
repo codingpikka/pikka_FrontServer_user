@@ -1,0 +1,27 @@
+  
+  {
+    
+
+  "cards" : [  
+    {
+      "title": "Card title",
+      "text": "This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+      "imgSrc": "https://img.sbs.co.kr/newsnet/etv/upload/2023/11/27/30000891217_500.jpg"
+    },
+    {
+      "title": "Card title",
+      "text": "This is a short card.",
+      "imgSrc": "../../../../public/img/brand/mang.png"
+    },
+    {
+      "title": "Card title",
+      "text": "This is a longer card with supporting text below as a natural lead-in to additional content.",
+      "imgSrc": "../../../../public/img/brand/mang.png"
+    },
+    {
+      "title": "Card title",
+      "text": "This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+      "imgSrc": "../../../../public/img/brand/mang.png"
+    } 
+  ]
+}

@@ -6,11 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-css": "sass src/styles.scss dist/styles.css"
+    "build-css": "sass src/styles.scss dist/styles.css",
+    "start-server": "node server.js" 
   },
   "dependencies": {
     "axios": "^1.7.2",
     "bootstrap-vue": "^2.0.4",
+    "express": "^4.17.1",
     "flatpickr": "^4.5.1",
     "nouislider": "^11.1.0",
     "register-service-worker": "^1.5.2",
