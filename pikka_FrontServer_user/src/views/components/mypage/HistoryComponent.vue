@@ -15,7 +15,7 @@
             style="width: 100%; height: 1000px;"
           >
             <template>
-              <form role="form">
+              <form role="form" @submit.prevent>
                 <div class="header-buttons">
                   <div
                     class="header-button"
@@ -46,7 +46,11 @@
                     <div class="info-thumbnail">{{ item.thumbnail }}</div>
                     <div class="info-content">
                       {{ getTruncatedContent(item.content) }}
-                      <button v-if="item.content.length > 5" @click="toggleContent(item.id)">
+                      <button
+                        type="button"
+                        v-if="item.content.length > 5"
+                        @click="toggleContent(item.id, $event)"
+                      >
                         {{ isContentVisible(item.id) ? '접기' : '더 보기' }}
                       </button>
                       <div v-if="isContentVisible(item.id)">
@@ -101,12 +105,12 @@ export default {
     Card
   },
   methods: {
-    async fetchData() {
+    async fetchData(button) {
       try {
-        if (this.activeButton === '작성내역') {
+        if (button === '작성내역') {
           const response = await axios.get('http://localhost:8083/api/post');
           this.data = response.data; // 작성내역 데이터 저장
-        } else if (this.activeButton === '문의내역') {
+        } else if (button === '문의내역') {
           const response = await axios.get('http://localhost:8083/insert/qna-list');
           this.inquiryItems = response.data; // 문의내역 데이터 저장
         }
@@ -116,13 +120,14 @@ export default {
     },
     setActiveButton(button) {
       this.activeButton = button;
-      this.fetchData(); // 버튼 클릭 시 데이터 가져오기
+      this.fetchData(button); // 버튼 클릭 시 데이터 가져오기
     },
     getTruncatedContent(content) {
       const maxLength = 5; // 최대 길이 설정
-      return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+      return content.length > maxLength ? content.substring(0, maxLength) + '... ' : content;
     },
-    toggleContent(id) {
+    toggleContent(id, event) {
+      event.preventDefault(); // 기본 동작을 막음
       const index = this.visibleContentIds.indexOf(id);
       if (index === -1) {
         this.visibleContentIds.push(id);
@@ -135,7 +140,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchData(); // 초기 로드 시 데이터 가져오기
+    this.fetchData(this.activeButton); // 초기 로드 시 데이터 가져오기
   }
 };
 </script>
