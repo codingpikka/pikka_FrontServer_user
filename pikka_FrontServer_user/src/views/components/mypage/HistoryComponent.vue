@@ -32,7 +32,6 @@
                     문의내역
                   </div>
                 </div>
-
                 <!-- 작성내역 섹션 -->
                 <div v-if="activeButton === '작성내역'" class="info-section">
                   <div class="info-row_header">
@@ -40,7 +39,6 @@
                     <div class="info-thumbnail">썸네일</div>
                     <div class="info-content">내용</div>
                   </div>
-
                   <div v-for="item in data" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-thumbnail">{{ item.thumbnail }}</div>
@@ -59,7 +57,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- 문의내역 섹션 -->
                 <div v-if="activeButton === '문의내역'" class="info-section">
                   <div class="info-row_header">
@@ -67,7 +64,6 @@
                     <div class="info-date">등록일</div>
                     <div class="info-category">카테고리</div>
                   </div>
-
                   <div v-for="item in inquiryItems" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-date">{{ item.contactPostedDate }}</div>
@@ -87,11 +83,9 @@
     </div>
   </section>
 </template>
-
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
-
 export default {
   data() {
     return {
@@ -144,13 +138,11 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .header-buttons {
   display: flex;
   margin-bottom: 20px;
 }
-
 .header-button {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
@@ -162,7 +154,6 @@ export default {
   border: 2px solid white;
   margin-right: 10px;
 }
-
 .header-button:hover,
 .header-button:focus,
 .header-button:active,
@@ -171,11 +162,9 @@ export default {
   color: white;
   border: 2px solid #3fa2f6;
 }
-
 .info-section {
   margin-top: 20px;
 }
-
 .info-row_header {
   display: flex;
   justify-content: space-between;
@@ -185,7 +174,6 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
 }
-
 .info-row {
   height: 120px;
   display: flex;
@@ -197,50 +185,41 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 15px;
 }
-
 .info-title {
   flex: 4;
   text-align: center;
 }
-
 .info-thumbnail {
   flex: 2;
   text-align: center;
 }
-
 .info-content {
   flex: 3;
   text-align: center;
 }
-
 .info-date {
   flex: 2;
   text-align: center;
 }
-
 .info-category {
   flex: 3;
   text-align: center;
 }
-
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
-
 .pagination span {
   margin: 0 5px;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
-
 .pagination span.disabled {
   cursor: not-allowed;
   color: #ccc;
 }
-
 .pagination span.active {
   background-color: #3fa2f6;
   color: white;

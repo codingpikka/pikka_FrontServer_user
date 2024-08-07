@@ -65,11 +65,9 @@
     </div>
   </section>
 </template>
-
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-
 export default {
   data() {
     return {
@@ -101,14 +99,12 @@ export default {
         alert('빈 값을 입력할 수 없습니다. 다시 입력해주세요!');
         return;
       }
-
       // 폼 데이터 준비
       const postDTO = {
         title: this.form.title,
         thumbnail: this.form.thumbnail,
         content: this.form.content,
       };
-
       try {
         const response = await axios.post('http://localhost:8083/api/post', postDTO);
         console.log('Data posted successfully:', response.data);
@@ -130,7 +126,4 @@ export default {
   },
 };
 </script>
-
-
-
 <style></style>
