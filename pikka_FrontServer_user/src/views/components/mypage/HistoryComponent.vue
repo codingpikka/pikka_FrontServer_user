@@ -32,6 +32,7 @@
                     문의내역
                   </div>
                 </div>
+
                 <!-- 작성내역 섹션 -->
                 <div v-if="activeButton === '작성내역'" class="info-section">
                   <div class="info-row_header">
@@ -39,15 +40,16 @@
                     <div class="info-thumbnail">썸네일</div>
                     <div class="info-content">내용</div>
                   </div>
+
                   <div v-for="item in data" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-thumbnail">{{ item.thumbnail }}</div>
                     <div class="info-content">
                       {{ getTruncatedContent(item.content) }}
                       <button
-                        type="button"
                         v-if="item.content.length > 5"
-                        @click="toggleContent(item.id, $event)"
+                        @click="toggleContent(item.id)"
+                        :class="['more-button', { active: isContentVisible(item.id) }]"
                       >
                         {{ isContentVisible(item.id) ? '접기' : '더 보기' }}
                       </button>
@@ -57,6 +59,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!-- 문의내역 섹션 -->
                 <div v-if="activeButton === '문의내역'" class="info-section">
                   <div class="info-row_header">
@@ -64,6 +67,7 @@
                     <div class="info-date">등록일</div>
                     <div class="info-category">카테고리</div>
                   </div>
+
                   <div v-for="item in inquiryItems" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-date">{{ item.contactPostedDate }}</div>
@@ -83,9 +87,11 @@
     </div>
   </section>
 </template>
+
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
+
 export default {
   data() {
     return {
@@ -105,7 +111,7 @@ export default {
           const response = await axios.get('http://localhost:8083/api/post');
           this.data = response.data; // 작성내역 데이터 저장
         } else if (button === '문의내역') {
-          const response = await axios.get('http://localhost:8083/insert/qna-list');
+          const response = await axios.get('http://localhost:8083/inquiry');
           this.inquiryItems = response.data; // 문의내역 데이터 저장
         }
       } catch (error) {
@@ -120,29 +126,31 @@ export default {
       const maxLength = 5; // 최대 길이 설정
       return content.length > maxLength ? content.substring(0, maxLength) + '... ' : content;
     },
-    toggleContent(id, event) {
-      event.preventDefault(); // 기본 동작을 막음
-      const index = this.visibleContentIds.indexOf(id);
-      if (index === -1) {
-        this.visibleContentIds.push(id);
-      } else {
-        this.visibleContentIds.splice(index, 1);
-      }
-    },
-    isContentVisible(id) {
-      return this.visibleContentIds.includes(id);
-    },
+    toggleContent(id) {
+    const index = this.visibleContentIds.indexOf(id);
+    if (index === -1) {
+      this.visibleContentIds.push(id);
+    } else {
+      this.visibleContentIds.splice(index, 1);
+    }
+  },
+  isContentVisible(id) {
+    return this.visibleContentIds.includes(id);
+  },
   },
   mounted() {
     this.fetchData(this.activeButton); // 초기 로드 시 데이터 가져오기
   }
 };
 </script>
+
 <style scoped>
+/* 기존 CSS 스타일 */
 .header-buttons {
   display: flex;
   margin-bottom: 20px;
 }
+
 .header-button {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
@@ -154,6 +162,7 @@ export default {
   border: 2px solid white;
   margin-right: 10px;
 }
+
 .header-button:hover,
 .header-button:focus,
 .header-button:active,
@@ -161,10 +170,37 @@ export default {
   background-color: #3fa2f6;
   color: white;
   border: 2px solid #3fa2f6;
+  outline: none; /* 검정 테두리 제거 */
 }
+
+/* 새로 추가할 CSS 스타일 */
+.more-button {
+  background-color: white;
+  color: #3fa2f6;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+  outline: none; /* 검정 테두리 제거 */
+}
+
+.more-button:hover,
+.more-button:focus,
+.more-button:active,
+.more-button.active {
+  background-color: #3fa2f6;
+  color: white;
+  border: 2px solid #3fa2f6;
+  outline: none; /* 검정 테두리 제거 */
+}
+
 .info-section {
   margin-top: 20px;
 }
+
 .info-row_header {
   display: flex;
   justify-content: space-between;
@@ -174,6 +210,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
 }
+
 .info-row {
   height: 120px;
   display: flex;
@@ -184,44 +221,62 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 15px;
+  overflow: hidden; /* 박스에서 내용이 벗어나지 않도록 함 */
 }
+
 .info-title {
   flex: 4;
   text-align: center;
 }
+
 .info-thumbnail {
   flex: 2;
   text-align: center;
 }
+
 .info-content {
   flex: 3;
   text-align: center;
+  overflow: hidden; /* 박스에서 내용이 벗어나지 않도록 함 */
+  word-break: break-word; /* 긴 단어가 박스를 벗어나지 않도록 함 */
+  max-height: 100px; /* 최대 높이 설정 */
 }
+
+.info-content.expanded {
+  max-height: none; /* 펼쳐진 상태에서 최대 높이 해제 */
+}
+
 .info-date {
   flex: 2;
   text-align: center;
 }
+
 .info-category {
   flex: 3;
   text-align: center;
 }
+
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
+
 .pagination span {
   margin: 0 5px;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .pagination span.disabled {
   cursor: not-allowed;
   color: #ccc;
 }
+
 .pagination span.active {
   background-color: #3fa2f6;
   color: white;
 }
 </style>
+
