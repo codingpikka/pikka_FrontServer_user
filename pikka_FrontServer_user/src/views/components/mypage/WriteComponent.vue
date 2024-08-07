@@ -97,10 +97,10 @@ export default {
     },
     async submitData() {
       // 폼 데이터 유효성 검사
-      if (!this.form.title || !this.form.thumbnail || !this.form.content) {
-        alert('빈 값을 입력할 수 없습니다. 다시 입력해주세요!');
-        return;
-      }
+      // if (!this.form.title || !this.form.thumbnail || !this.form.content) {
+      //   alert('빈 값을 입력할 수 없습니다. 다시 입력해주세요!');
+      //   return;
+      // }
 
       // 폼 데이터 준비
       const postDTO = {
