@@ -16,13 +16,9 @@
           >
             <template>
               <form role="form">
-                <div
-                  class="header-buttons"
-                  style="display: flex; justify-content: flex-start; margin-bottom: 20px;"
-                >
+                <div class="header-buttons">
                   <div
                     class="header-button"
-                    style="margin-right: 10px;"
                     @click="setActiveButton('작성내역')"
                     :class="{ active: activeButton === '작성내역' }"
                   >
@@ -46,9 +42,17 @@
                   </div>
 
                   <div v-for="item in data" :key="item.id" class="info-row">
-                    <p>제목: {{ item.title }}</p>
-                    <p>썸네일: {{ item.thumbnail }}</p>
-                    <p>내용: {{ item.content }}</p>
+                    <div class="info-title">{{ item.title }}</div>
+                    <div class="info-thumbnail">{{ item.thumbnail }}</div>
+                    <div class="info-content">
+                      {{ getTruncatedContent(item.content) }}
+                      <button v-if="item.content.length > 5" @click="toggleContent(item.id)">
+                        {{ isContentVisible(item.id) ? '접기' : '더 보기' }}
+                      </button>
+                      <div v-if="isContentVisible(item.id)">
+                        {{ item.content }}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -62,12 +66,12 @@
 
                   <div v-for="item in inquiryItems" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
-                    <div class="info-date">{{ item.date }}</div>
+                    <div class="info-date">{{ item.contactPostedDate }}</div>
                     <div
                       class="info-category"
-                      :style="getCategoryStyle(item.category)"
+                      :style="getCategoryStyle(item.contactType)"
                     >
-                      {{ item.category }}
+                      {{ item.contactType }}
                     </div>
                   </div>
                 </div>
@@ -89,7 +93,8 @@ export default {
     return {
       data: [],           // 작성내역 데이터를 저장
       inquiryItems: [],   // 문의내역 데이터를 저장
-      activeButton: '작성내역' // 기본으로 활성화된 버튼
+      activeButton: '작성내역', // 기본으로 활성화된 버튼
+      visibleContentIds: [] // 클릭하여 펼쳐진 콘텐츠 ID 저장
     };
   },
   components: {
@@ -113,18 +118,21 @@ export default {
       this.activeButton = button;
       this.fetchData(); // 버튼 클릭 시 데이터 가져오기
     },
-    getCategoryStyle(category) {
-      switch (category) {
-        case '자격증':
-          return 'color: #21AF71;'; // 카테고리별 스타일
-        case '취업':
-          return 'color: #28B1CD;';
-        case '기타':
-          return 'color: #FF3708;';
-        default:
-          return 'color: #000;';
+    getTruncatedContent(content) {
+      const maxLength = 5; // 최대 길이 설정
+      return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+    },
+    toggleContent(id) {
+      const index = this.visibleContentIds.indexOf(id);
+      if (index === -1) {
+        this.visibleContentIds.push(id);
+      } else {
+        this.visibleContentIds.splice(index, 1);
       }
-    }
+    },
+    isContentVisible(id) {
+      return this.visibleContentIds.includes(id);
+    },
   },
   mounted() {
     this.fetchData(); // 초기 로드 시 데이터 가져오기
@@ -132,9 +140,9 @@ export default {
 };
 </script>
 
-
-<style>
+<style scoped>
 .header-buttons {
+  display: flex;
   margin-bottom: 20px;
 }
 
@@ -147,6 +155,7 @@ export default {
   cursor: pointer;
   text-align: center;
   border: 2px solid white;
+  margin-right: 10px;
 }
 
 .header-button:hover,
