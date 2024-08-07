@@ -73,13 +73,16 @@ export default new Router({
       },
     },
     {
-      path: "/certificationDetail",
+      path: "/certificationDetail/:id",
       name: "certificationDetail",
       components: {
         header: AppHeader,
         default: CertificationDetail,
         footer: AppFooter,
       },
+      props: {
+        default: true
+      }
     },
     {
       path: "/write",
