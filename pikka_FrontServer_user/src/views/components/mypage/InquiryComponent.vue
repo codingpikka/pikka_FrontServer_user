@@ -74,21 +74,20 @@
 
 <script>
 import axios from "axios";
-import { useRouter } from "vue-router";
+import Card from '../../../components/Card.vue';
 
 export default {
+  components: {
+    Card
+  },
   data() {
     return {
       selectedCategory: "",
       form: {
         title: "",
-        content: "",
-      },
+        content: ""
+      }
     };
-  },
-  setup() {
-    const router = useRouter();
-    return { router };
   },
   methods: {
     selectCategory(category) {
@@ -151,13 +150,14 @@ export default {
     resetForm() {
       this.form = {
         title: "",
-        content: "",
+        content: ""
       };
       this.selectedCategory = "";
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .category-section {
   margin: 10px;
