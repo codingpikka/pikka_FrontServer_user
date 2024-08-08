@@ -74,6 +74,7 @@
 
 <script>
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export default {
   data() {
@@ -83,9 +84,11 @@ export default {
         title: "",
         content: "",
       },
-      message: "",
-      messageType: "",
     };
+  },
+  setup() {
+    const router = useRouter();
+    return { router };
   },
   methods: {
     selectCategory(category) {
@@ -155,7 +158,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .category-section {
   margin: 10px;

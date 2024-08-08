@@ -95,24 +95,27 @@ import Card from '../../../components/Card.vue';
 export default {
   data() {
     return {
-      data: [],           // 작성내역 데이터를 저장
-      inquiryItems: [],   // 문의내역 데이터를 저장
-      activeButton: '작성내역', // 기본으로 활성화된 버튼
-      visibleContentIds: [] // 클릭하여 펼쳐진 콘텐츠 ID 저장
+      data: [],
+      inquiryItems: [],
+      activeButton: '작성내역',
+      contentVisibility: {}
     };
   },
   components: {
     Card
+  },
+  mounted() {
+    this.fetchData(this.activeButton);
   },
   methods: {
     async fetchData(button) {
       try {
         if (button === '작성내역') {
           const response = await axios.get('http://localhost:8083/api/post');
-          this.data = response.data; // 작성내역 데이터 저장
+          this.data = response.data;
         } else if (button === '문의내역') {
           const response = await axios.get('http://localhost:8083/inquiry');
-          this.inquiryItems = response.data; // 문의내역 데이터 저장
+          this.inquiryItems = response.data;
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -120,29 +123,33 @@ export default {
     },
     setActiveButton(button) {
       this.activeButton = button;
-      this.fetchData(button); // 버튼 클릭 시 데이터 가져오기
+      this.fetchData(button);
     },
     getTruncatedContent(content) {
-      const maxLength = 5; // 최대 길이 설정
-      return content.length > maxLength ? content.substring(0, maxLength) + '... ' : content;
+      return content.length > 5 ? content.substring(0, 5) : content;
     },
     toggleContent(id) {
-    const index = this.visibleContentIds.indexOf(id);
-    if (index === -1) {
-      this.visibleContentIds.push(id);
-    } else {
-      this.visibleContentIds.splice(index, 1);
+      this.$set(this.contentVisibility, id, !this.contentVisibility[id]);
+    },
+    isContentVisible(id) {
+      return this.contentVisibility[id];
+    },
+    getCategoryStyle(category) {
+      switch (category) {
+        case '자격증':
+          return { color: '#21AF71' };
+        case '취업':
+          return { color: '#28B1CD' };
+        case '기타':
+          return { color: '#FF3708' };
+        default:
+          return {};
+      }
     }
-  },
-  isContentVisible(id) {
-    return this.visibleContentIds.includes(id);
-  },
-  },
-  mounted() {
-    this.fetchData(this.activeButton); // 초기 로드 시 데이터 가져오기
   }
 };
 </script>
+
 
 <style scoped>
 /* 기존 CSS 스타일 */
