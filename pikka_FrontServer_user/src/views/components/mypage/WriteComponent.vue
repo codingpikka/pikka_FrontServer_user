@@ -65,6 +65,7 @@
     </div>
   </section>
 </template>
+
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -126,4 +127,5 @@ export default {
   },
 };
 </script>
+
 <style></style>
