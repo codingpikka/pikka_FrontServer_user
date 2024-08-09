@@ -14,7 +14,46 @@
             class="border"
             style="width: 100%; height: 1000px;"
           >
-            <template>
+          <template v-if="isEditing">
+                  <!-- 수정 폼 -->
+                  <form @submit.prevent="updatePost" class="edit-form">
+                    <div class="form-group">
+                      <label for="title">제목</label>
+                      <input
+                        type="text"
+                        v-model="editForm.title"
+                        id="title"
+                        class="form-control"
+                        placeholder="제목을 입력하세요"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="thumbnail">썸네일</label>
+                      <input
+                        type="text"
+                        v-model="editForm.thumbnail"
+                        id="thumbnail"
+                        class="form-control"
+                        placeholder="썸네일 URL을 입력하세요"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="content">내용</label>
+                      <textarea
+                        v-model="editForm.content"
+                        id="content"
+                        class="form-control"
+                        placeholder="내용을 입력하세요"
+                      ></textarea>
+                    </div>
+                    <div class="form-actions">
+                      <button type="submit" class="btn btn-primary">수정하기</button>
+                      <button @click="cancelEdit" class="btn btn-secondary">취소</button>
+                    </div>
+                  </form>
+                </template>
+
+            <template v-else>
               <form role="form" @submit.prevent>
                 <div class="header-buttons">
                   <div
@@ -39,6 +78,7 @@
                     <div class="info-title">제목</div>
                     <div class="info-thumbnail">썸네일</div>
                     <div class="info-content">내용</div>
+                    <div class="info-actions">수정/삭제</div>
                   </div>
 
                   <div v-for="item in data" :key="item.id" class="info-row">
@@ -56,6 +96,14 @@
                       <div v-if="isContentVisible(item.id)">
                         {{ item.content }}
                       </div>
+                    </div>
+                    <div class="info-actions">
+                      <button @click="startEdit(item)" class="edit-button">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button @click="confirmDeletePost(item.id)" class="delete-button">
+                        <i class="fa fa-trash"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -98,7 +146,14 @@ export default {
       data: [],
       inquiryItems: [],
       activeButton: '작성내역',
-      contentVisibility: {}
+      contentVisibility: {},
+      isEditing: false,
+      currentPost: null,
+      editForm: {
+        title: '',
+        thumbnail: '',
+        content: ''
+      }
     };
   },
   components: {
@@ -134,6 +189,42 @@ export default {
     isContentVisible(id) {
       return this.contentVisibility[id];
     },
+    startEdit(post) {
+      this.isEditing = true;
+      this.currentPost = post;
+      this.editForm = { ...post };
+    },
+    async updatePost() {
+      try {
+        await axios.put(`http://localhost:8083/api/post/${this.currentPost.id}`, this.editForm);
+        alert('게시글이 성공적으로 수정되었습니다.');
+        this.isEditing = false;
+        this.fetchData(this.activeButton); // 업데이트된 데이터로 다시 가져오기
+      } catch (error) {
+        console.error('Error updating post:', error);
+        alert('게시글을 수정하는 중 오류가 발생했습니다.');
+      }
+    },
+    cancelEdit() {
+      this.isEditing = false;
+      this.currentPost = null;
+    },
+    async confirmDeletePost(id) {
+      const confirmed = window.confirm("정말 이 게시글을 삭제하시겠습니까?");
+      if (confirmed) {
+        this.deletePost(id);
+      }
+    },
+    async deletePost(id) {
+      try {
+        await axios.delete(`http://localhost:8083/api/post/${id}`);
+        this.data = this.data.filter(item => item.id !== id);
+        alert("게시글이 성공적으로 삭제되었습니다.");
+      } catch (error) {
+        console.error("Error deleting post:", error);
+        alert("게시글을 삭제하는 중 오류가 발생했습니다.");
+      }
+    },
     getCategoryStyle(category) {
       switch (category) {
         case '자격증':
@@ -149,7 +240,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 /* 기존 CSS 스타일 */
@@ -285,5 +375,95 @@ export default {
   background-color: #3fa2f6;
   color: white;
 }
-</style>
 
+.info-actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.edit-button,
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.edit-button i,
+.delete-button i {
+  font-size: 18px;
+}
+
+.edit-button:hover i {
+  color: #3fa2f6; /* 수정 버튼 호버 색상 */
+}
+
+.delete-button:hover i {
+  color: #FF3708; /* 삭제 버튼 호버 색상 */
+}
+
+/* 수정 폼 CSS */
+.edit-container {
+  padding: 20px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+textarea.form-control {
+  height: 150px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #3fa2f6;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #ccc;
+  color: black;
+}
+
+.btn-primary:hover {
+  background-color: #2d8cf0;
+}
+
+.btn-secondary:hover {
+  background-color: #bbb;
+}
+</style>
