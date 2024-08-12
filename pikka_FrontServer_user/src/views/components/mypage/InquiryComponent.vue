@@ -127,7 +127,7 @@ export default {
         contactContents: this.form.content,
         contactPostedDate: new Date().toISOString().split("T")[0], // 현재 날짜
         adminId: 2, // 예시로 관리자 ID를 하드코딩
-        adminName: "관리자", // 예시로 관리자 이름을 하드코딩
+        adminName: "관리자",
         responseTitle: "",
         responseContents: "",
         responsePostedDate: "",
