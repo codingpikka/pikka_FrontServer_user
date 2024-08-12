@@ -74,19 +74,17 @@
 
 <script>
 import axios from "axios";
-import Card from '../../../components/Card.vue';
 
 export default {
-  components: {
-    Card
-  },
   data() {
     return {
       selectedCategory: "",
       form: {
         title: "",
-        content: ""
-      }
+        content: "",
+      },
+      message: "",
+      messageType: "",
     };
   },
   methods: {
@@ -124,10 +122,11 @@ export default {
         userId: 1, // 예시로 사용자 ID를 하드코딩
         userName: "홍길동", // 예시로 사용자 이름을 하드코딩
         contactType: this.selectedCategory,
+        contactTitle: this.form.title, // 제목 추가
         contactContents: this.form.content,
         contactPostedDate: new Date().toISOString().split("T")[0], // 현재 날짜
         adminId: 2, // 예시로 관리자 ID를 하드코딩
-        adminName: "관리자",
+        adminName: "관리자", // 예시로 관리자 이름을 하드코딩
         responseTitle: "",
         responseContents: "",
         responsePostedDate: "",
@@ -150,11 +149,11 @@ export default {
     resetForm() {
       this.form = {
         title: "",
-        content: ""
+        content: "",
       };
       this.selectedCategory = "";
-    }
-  }
+    },
+  },
 };
 </script>
 
