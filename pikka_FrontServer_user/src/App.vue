@@ -5,9 +5,9 @@
     <div id="app">
         <router-view name="header"></router-view>
         <main>
-            <fade-transition origin="center" mode="out-in" :duration="250">
+            <div origin="center" mode="out-in" :duration="250">
                 <router-view/>
-            </fade-transition>
+            </div>
             
         </main>
         <router-view name="footer"></router-view>
@@ -17,18 +17,6 @@
 </template>
 
 <script setup>
-// import { FadeTransition } from "vue2-transitions";
-
-// export default {
-//   components: {
-//     FadeTransition,
-//     methods: {
-//       handler : ()=>{
-//         console.log("dfdf")
-//       }
-//     },
-//   }
-// };
 
 
 const handler = () =>{

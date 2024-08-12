@@ -5,8 +5,8 @@
   >
     <div class="container pt-lg-md">
       <div
-        class=""
-        style="display: flex; justify-content: center; padding: 20px; font-size: 30px;"
+        class="text-center"
+        style="padding: 20px; font-size: 30px;"
       >
         글쓰기
       </div>
@@ -39,15 +39,6 @@
                   placeholder="썸네일 입력하세요"
                 />
               </div>
-              <div class="form-group">
-                <input
-                  id="background"
-                  v-model="form.background"
-                  type="text"
-                  class="form-control mb-3"
-                  placeholder="배경 이미지 URL을 입력하세요"
-                />
-              </div>
               <div style="border-bottom: 0.3px solid gray;"></div>
               <textarea
                 id="content"
@@ -57,20 +48,16 @@
                 v-model="form.content"
               ></textarea>
               
-                <div class="text-center">
-                  <div class="text-center">
-
-                    <button
-                      type="$emit"
-                      class="btn btn-primary"
-                      style="background-color: #0ECDEF;"
-                    >
-                    등록하기
-                    </button>
-                  </div>
-                </div>
-              
-              </form>
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="background-color: #0ECDEF;"
+                >
+                등록하기
+                </button>
+              </div>
+            </form>
           </card>
         </div>
       </div>
@@ -79,55 +66,71 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+import Card from '../../../components/Card.vue';
 
 export default {
+  components: {
+    Card
+  },
   data() {
     return {
       form: {
         title: "",
         thumbnail: "",
-        background: "",
-        content: "",
-      },
-      message: "",
-      messageType: "",
+        content: ""
+      }
     };
   },
   methods: {
     async submitData() {
+      // 폼 데이터 유효성 검사
+      if (!this.form.title || !this.form.thumbnail || !this.form.content) {
+        alert('빈 값을 입력할 수 없습니다. 다시 입력해주세요!');
+        return;
+      }
+
       // 폼 데이터 준비
-      const newData = {
+      const postDTO = {
         title: this.form.title,
         thumbnail: this.form.thumbnail,
-        background: this.form.background,
-        content: this.form.content,
+        content: this.form.content
       };
 
+      console.log('Submitting data:', postDTO);
+
       try {
-      const response = await axios.post('http://localhost:8003/data', newData);
-      alert('작성 완료!');
-    
-      this.$router.push('/history');
-      this.resetForm();
-    } catch (error) {
-      alert('작성 실패! 다시 확인해주세요!');
-      console.error('제출 오류:', error.response ? error.response.data : error.message);
-    }
+        // axios를 사용하여 POST 요청 보내기
+        const response = await axios.post('http://localhost:8083/api/post', postDTO, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        // 성공 시 콘솔에 응답 데이터 출력
+        console.log('Data posted successfully:', response.data);
+
+        // 성공 메시지 및 라우팅
+        alert('작성 완료!');
+        this.resetForm();
+        this.$router.push('/history');
+      } catch (error) {
+        // 오류 시 콘솔에 오류 데이터 출력 및 알림
+        console.error('Error posting data:', error.response ? error.response.data : error.message);
+        alert('작성 실패! 다시 확인해주세요!');
+      }
     },
     resetForm() {
       this.form = {
         title: "",
         thumbnail: "",
-        background: "",
-        content: "",
+        content: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 
-
-
-
-<style></style>
+<style>
+/* 스타일을 여기에 추가하세요. */
+</style>

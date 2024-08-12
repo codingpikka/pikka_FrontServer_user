@@ -1,16 +1,16 @@
 import Vue from "vue";
 import Router from "vue-router";
-import AppHeader from "../layout/AppHeader.vue"; // 경로 수정
-import AppFooter from "../layout/AppFooter.vue"; // 경로 수정
-import Components from "../views/Components.vue"; // 경로 수정
-import Write from "../views/Write.vue"; // 경로 수정
-import History from "../views/History.vue"; // 경로 수정
-import Inquiry from "../views/Inquiry.vue"; // 경로 수정
-import Job from "../views/Job.vue"; // 경로 수정
-import JobDetail from '../views/JobDetail.vue'; // 경로 수정
-import Certification from "../views/Certification.vue"; // 경로 수정
-import CertificationDetail from "../views/CertificationDetail.vue"; // 경로 수정
-import Post from "../views/Post.vue"; // 경로 수정
+import AppHeader from "../layout/AppHeader.vue";
+import AppFooter from "../layout/AppFooter.vue";
+import Components from "../views/Components.vue";
+import Write from "../views/Write.vue";
+import History from "../views/History.vue";
+import Inquiry from "../views/Inquiry.vue";
+import Job from "../views/Job.vue";
+import JobDetail from '../views/JobDetail.vue';
+import Certification from "../views/Certification.vue";
+import CertificationDetail from "../views/CertificationDetail.vue";
+import Post from "../views/Post.vue";
 import PostDetail from "../views/PostDetail.vue";
 
 Vue.use(Router);
@@ -74,13 +74,16 @@ export default new Router({
       },
     },
     {
-      path: "/certificationDetail",
+      path: "/certificationDetail/:id",
       name: "certificationDetail",
       components: {
         header: AppHeader,
         default: CertificationDetail,
         footer: AppFooter,
       },
+      props: {
+        default: true
+      }
     },
     {
       path: "/write",
