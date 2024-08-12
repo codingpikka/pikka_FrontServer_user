@@ -56,7 +56,7 @@ export default new Router({
       },
     },
     {
-      path: "/postdetail",
+      path: "/post/:id",
       name: "postdetail",
       components: {
         header: AppHeader,
