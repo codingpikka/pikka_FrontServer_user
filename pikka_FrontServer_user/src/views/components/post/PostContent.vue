@@ -1,7 +1,3 @@
-
-
-
-
 <template>
   <div>
     <section class="section section-shaped my-0 overflow-hidden">
@@ -15,12 +11,12 @@
           </div>
         </div>
         <div class="row row-grid mt-5">
-          <div v-for="(notice, index) in notices" :key="notice.id" class="col-lg-4">
+          <div v-for="(post, index) in post" :key="post.id" class="col-lg-4">
             <icon name="ni ni-settings" size="lg" gradient="white" shadow round color="primary"></icon>
-            <h5 class="text-Gray mt-3">{{ notice.title }}</h5>
-            <p class="text-Black mt-3">{{ truncateContent(notice.content) }}</p>
+            <h5 class="text-Gray mt-3">{{ post.title }}</h5>
+            <p class="text-Black mt-3">{{ truncateContent(post.content) }}</p>
             <!-- Router Link 사용 -->
-            <router-link :to="{ name: 'postdetail', params: { id: notice.id } }">
+            <router-link :to="{ name: 'postdetail', params: { id: post.id } }">
               <badge tag="a" type="info">상세보기</badge>
             </router-link>
           </div>
@@ -36,13 +32,13 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      notices: []
+      post: []
     };
   },
   async created() {
     try {
       const response = await axios.get('http://localhost:8083/api/post');
-      this.notices = response.data;
+      this.post = response.data;
     } catch (error) {
       console.error('게시글을 불러오는 데 실패했습니다:', error);
     }
@@ -55,5 +51,4 @@ export default {
 };
 </script>
 <style scoped>
-/* 여기에 필요한 스타일을 추가하세요 */
 </style>

@@ -14,44 +14,74 @@
             class="border"
             style="width: 100%; height: 1000px;"
           >
-          <template v-if="isEditing">
-                  <!-- 수정 폼 -->
-                  <form @submit.prevent="updatePost" class="edit-form">
-                    <div class="form-group">
-                      <label for="title">제목</label>
-                      <input
-                        type="text"
-                        v-model="editForm.title"
-                        id="title"
-                        class="form-control"
-                        placeholder="제목을 입력하세요"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="thumbnail">썸네일</label>
-                      <input
-                        type="text"
-                        v-model="editForm.thumbnail"
-                        id="thumbnail"
-                        class="form-control"
-                        placeholder="썸네일 URL을 입력하세요"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="content">내용</label>
-                      <textarea
-                        v-model="editForm.content"
-                        id="content"
-                        class="form-control"
-                        placeholder="내용을 입력하세요"
-                      ></textarea>
-                    </div>
-                    <div class="form-actions">
-                      <button type="submit" class="btn btn-primary">수정하기</button>
-                      <button @click="cancelEdit" class="btn btn-secondary">취소</button>
-                    </div>
-                  </form>
-                </template>
+            <!-- 게시글 수정 폼 -->
+            <template v-if="isEditing">
+              <form @submit.prevent="updatePost" class="edit-form">
+                <div class="form-group">
+                  <label for="title">제목</label>
+                  <input
+                    type="text"
+                    v-model="editForm.title"
+                    id="title"
+                    class="form-control"
+                    placeholder="제목을 입력하세요"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="thumbnail">썸네일</label>
+                  <input
+                    type="text"
+                    v-model="editForm.thumbnail"
+                    id="thumbnail"
+                    class="form-control"
+                    placeholder="썸네일 URL을 입력하세요"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="content">내용</label>
+                  <textarea
+                    v-model="editForm.content"
+                    id="content"
+                    class="form-control"
+                    placeholder="내용을 입력하세요"
+                  ></textarea>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">수정하기</button>
+                  <button @click="cancelEdit" class="btn btn-secondary">취소</button>
+                </div>
+              </form>
+            </template>
+
+            <!-- 문의 수정 폼 -->
+            <template v-else-if="isEditingInquiry">
+              <form @submit.prevent="updateInquiry" class="edit-form">
+                <div class="form-group">
+                  <label for="title">제목</label>
+                  <input
+                    type="text"
+                    v-model="inquiryEditForm.title"
+                    id="title"
+                    class="form-control"
+                    placeholder="제목을 입력하세요"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="category">카테고리</label>
+                  <input
+                    type="text"
+                    v-model="inquiryEditForm.contactType"
+                    id="category"
+                    class="form-control"
+                    placeholder="카테고리를 입력하세요"
+                  />
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">수정하기</button>
+                  <button @click="cancelEditInquiry" class="btn btn-secondary">취소</button>
+                </div>
+              </form>
+            </template>
 
             <template v-else>
               <form role="form" @submit.prevent>
@@ -81,21 +111,11 @@
                     <div class="info-actions">수정/삭제</div>
                   </div>
 
-                  <div v-for="item in data" :key="item.id" class="info-row">
+                  <div v-for="item in paginatedData" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-thumbnail">{{ item.thumbnail }}</div>
                     <div class="info-content">
                       {{ getTruncatedContent(item.content) }}
-                      <button
-                        v-if="item.content.length > 5"
-                        @click="toggleContent(item.id)"
-                        :class="['more-button', { active: isContentVisible(item.id) }]"
-                      >
-                        {{ isContentVisible(item.id) ? '접기' : '더 보기' }}
-                      </button>
-                      <div v-if="isContentVisible(item.id)">
-                        {{ item.content }}
-                      </div>
                     </div>
                     <div class="info-actions">
                       <button @click="startEdit(item)" class="edit-button">
@@ -106,6 +126,23 @@
                       </button>
                     </div>
                   </div>
+
+                  <!-- 페이지네이션 -->
+                  <div class="pagination">
+                    <button 
+                      @click="changePage(currentPage - 1)" 
+                      :disabled="currentPage === 1"
+                    >
+                      이전
+                    </button>
+                    <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
+                    <button 
+                      @click="changePage(currentPage + 1)" 
+                      :disabled="currentPage === totalPages"
+                    >
+                      다음
+                    </button>
+                  </div>
                 </div>
 
                 <!-- 문의내역 섹션 -->
@@ -114,9 +151,10 @@
                     <div class="info-title">제목</div>
                     <div class="info-date">등록일</div>
                     <div class="info-category">카테고리</div>
+                    <div class="info-actions">수정/삭제</div>
                   </div>
 
-                  <div v-for="item in inquiryItems" :key="item.id" class="info-row">
+                  <div v-for="item in paginatedInquiryItems" :key="item.id" class="info-row">
                     <div class="info-title">{{ item.title }}</div>
                     <div class="info-date">{{ item.contactPostedDate }}</div>
                     <div
@@ -125,6 +163,31 @@
                     >
                       {{ item.contactType }}
                     </div>
+                    <div class="info-actions">
+                      <button @click="startEditInquiry(item)" class="edit-button">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button @click="confirmDeleteInquiry(item.id)" class="delete-button">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- 페이지네이션 -->
+                  <div class="pagination">
+                    <button 
+                      @click="changeInquiryPage(currentInquiryPage - 1)" 
+                      :disabled="currentInquiryPage === 1"
+                    >
+                      이전
+                    </button>
+                    <span>페이지 {{ currentInquiryPage }} / {{ totalInquiryPages }}</span>
+                    <button 
+                      @click="changeInquiryPage(currentInquiryPage + 1)" 
+                      :disabled="currentInquiryPage === totalInquiryPages"
+                    >
+                      다음
+                    </button>
                   </div>
                 </div>
               </form>
@@ -135,7 +198,6 @@
     </div>
   </section>
 </template>
-
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -146,14 +208,25 @@ export default {
       data: [],
       inquiryItems: [],
       activeButton: '작성내역',
-      contentVisibility: {},
       isEditing: false,
+      isEditingInquiry: false, // 추가
       currentPost: null,
+      currentInquiry: null, // 추가
       editForm: {
         title: '',
         thumbnail: '',
         content: ''
-      }
+      },
+      inquiryEditForm: { // 추가
+        title: '',
+        contactType: ''
+      },
+      currentPage: 1,
+      itemsPerPage: 5,
+      totalPages: 1,
+      currentInquiryPage: 1,
+      inquiryItemsPerPage: 5,
+      totalInquiryPages: 1
     };
   },
   components: {
@@ -162,15 +235,29 @@ export default {
   mounted() {
     this.fetchData(this.activeButton);
   },
+  computed: {
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.data.slice(start, end);
+    },
+    paginatedInquiryItems() {
+      const start = (this.currentInquiryPage - 1) * this.inquiryItemsPerPage;
+      const end = start + this.inquiryItemsPerPage;
+      return this.inquiryItems.slice(start, end);
+    }
+  },
   methods: {
     async fetchData(button) {
       try {
         if (button === '작성내역') {
           const response = await axios.get('http://localhost:8083/api/post');
           this.data = response.data;
+          this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
         } else if (button === '문의내역') {
           const response = await axios.get('http://localhost:8083/inquiry');
           this.inquiryItems = response.data;
+          this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -183,12 +270,6 @@ export default {
     getTruncatedContent(content) {
       return content.length > 5 ? content.substring(0, 5) : content;
     },
-    toggleContent(id) {
-      this.$set(this.contentVisibility, id, !this.contentVisibility[id]);
-    },
-    isContentVisible(id) {
-      return this.contentVisibility[id];
-    },
     startEdit(post) {
       this.isEditing = true;
       this.currentPost = post;
@@ -199,7 +280,7 @@ export default {
         await axios.put(`http://localhost:8083/api/post/${this.currentPost.id}`, this.editForm);
         alert('게시글이 성공적으로 수정되었습니다.');
         this.isEditing = false;
-        this.fetchData(this.activeButton); // 업데이트된 데이터로 다시 가져오기
+        this.fetchData(this.activeButton);
       } catch (error) {
         console.error('Error updating post:', error);
         alert('게시글을 수정하는 중 오류가 발생했습니다.');
@@ -219,12 +300,63 @@ export default {
       try {
         await axios.delete(`http://localhost:8083/api/post/${id}`);
         this.data = this.data.filter(item => item.id !== id);
+        this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
         alert("게시글이 성공적으로 삭제되었습니다.");
       } catch (error) {
         console.error("Error deleting post:", error);
         alert("게시글을 삭제하는 중 오류가 발생했습니다.");
       }
     },
+    startEditInquiry(inquiry) {
+    this.isEditingInquiry = true;
+    this.currentInquiry = inquiry;
+    this.inquiryEditForm = { 
+      title: inquiry.title, 
+      contactType: inquiry.contactType 
+    };
+    },
+    async updateInquiry() {
+    if (!this.currentInquiry || !this.currentInquiry.id) {
+      console.error("문의 ID가 올바르지 않습니다.");
+      return;
+    }
+
+    try {
+      await axios.put(`http://localhost:8083/inquiry/${this.currentInquiry.id}`, this.inquiryEditForm);
+      alert('문의 내역이 성공적으로 수정되었습니다.');
+      this.isEditingInquiry = false;
+      this.fetchData(this.activeButton);
+    } catch (error) {
+      console.error('문의 내역 수정 중 오류 발생:', error);
+      alert('문의 내역을 수정하는 중 오류가 발생했습니다.');
+    }
+  },
+    cancelEditInquiry() { // 추가
+      this.isEditingInquiry = false;
+      this.currentInquiry = null;
+    },
+    async confirmDeleteInquiry(id) {
+    const confirmed = window.confirm("정말 이 문의 내역을 삭제하시겠습니까?");
+    if (confirmed) {
+      this.deleteInquiry(id);
+    }
+  },
+  async deleteInquiry(id) {
+    if (!id) {
+      console.error("문의 ID가 올바르지 않습니다.");
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:8083/inquiry/${id}`);
+      this.inquiryItems = this.inquiryItems.filter(item => item.id !== id);
+      this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
+      alert("문의 내역이 성공적으로 삭제되었습니다.");
+    } catch (error) {
+      console.error("문의 내역 삭제 중 오류 발생:", error);
+      alert("문의 내역을 삭제하는 중 오류가 발생했습니다.");
+    }
+  },
     getCategoryStyle(category) {
       switch (category) {
         case '자격증':
@@ -235,6 +367,16 @@ export default {
           return { color: '#FF3708' };
         default:
           return {};
+      }
+    },
+    changePage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    },
+    changeInquiryPage(page) {
+      if (page >= 1 && page <= this.totalInquiryPages) {
+        this.currentInquiryPage = page;
       }
     }
   }

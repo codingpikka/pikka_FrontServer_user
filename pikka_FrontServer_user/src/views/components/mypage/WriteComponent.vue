@@ -67,12 +67,8 @@
 
 <script>
 import axios from 'axios';
-import Card from '../../../components/Card.vue';
 
 export default {
-  components: {
-    Card
-  },
   data() {
     return {
       form: {
@@ -126,7 +122,8 @@ export default {
         thumbnail: "",
         content: ""
       };
-    }
+    },
+    
   }
 };
 </script>
