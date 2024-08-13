@@ -56,13 +56,16 @@ export default new Router({
       },
     },
     {
-      path: "/post/:id",
+      path: "/postdetail/:id",
       name: "postdetail",
       components: {
         header: AppHeader,
         default: PostDetail,
         footer: AppFooter
       },
+      props: {
+        default: true
+      }
     },
     {
       path: "/certification",
