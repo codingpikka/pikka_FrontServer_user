@@ -121,6 +121,7 @@ export default {
       const newData = {
         userId: 1, // 예시로 사용자 ID를 하드코딩
         userName: "홍길동", // 예시로 사용자 이름을 하드코딩
+        userTitle: this.form.title,
         contactType: this.selectedCategory,
         contactTitle: this.form.title, // 제목 추가
         contactContents: this.form.content,

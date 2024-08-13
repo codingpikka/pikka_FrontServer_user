@@ -155,7 +155,7 @@
                   </div>
 
                   <div v-for="item in paginatedInquiryItems" :key="item.id" class="info-row">
-                    <div class="info-title">{{ item.title }}</div>
+                    <div class="info-title">{{ item.userTitle }}</div>
                     <div class="info-date">{{ item.contactPostedDate }}</div>
                     <div
                       class="info-category"
@@ -307,56 +307,43 @@ export default {
         alert("게시글을 삭제하는 중 오류가 발생했습니다.");
       }
     },
-    startEditInquiry(inquiry) {
-    this.isEditingInquiry = true;
-    this.currentInquiry = inquiry;
-    this.inquiryEditForm = { 
-      title: inquiry.title, 
-      contactType: inquiry.contactType 
-    };
+    startEditInquiry(inquiry) { // 추가
+      this.isEditingInquiry = true;
+      this.currentInquiry = inquiry;
+      this.inquiryEditForm = { ...inquiry };
     },
-    async updateInquiry() {
-    if (!this.currentInquiry || !this.currentInquiry.id) {
-      console.error("문의 ID가 올바르지 않습니다.");
-      return;
-    }
-
-    try {
-      await axios.put(`http://localhost:8083/inquiry/${this.currentInquiry.id}`, this.inquiryEditForm);
-      alert('문의 내역이 성공적으로 수정되었습니다.');
-      this.isEditingInquiry = false;
-      this.fetchData(this.activeButton);
-    } catch (error) {
-      console.error('문의 내역 수정 중 오류 발생:', error);
-      alert('문의 내역을 수정하는 중 오류가 발생했습니다.');
-    }
-  },
+    async updateInquiry() { // 추가
+      try {
+        await axios.put(`http://localhost:8083/inquiry/${this.currentInquiry.id}`, this.inquiryEditForm);
+        alert('문의 내역이 성공적으로 수정되었습니다.');
+        this.isEditingInquiry = false;
+        this.fetchData(this.activeButton);
+      } catch (error) {
+        console.error('Error updating inquiry:', error);
+        alert('문의 내역을 수정하는 중 오류가 발생했습니다.');
+      }
+    },
     cancelEditInquiry() { // 추가
       this.isEditingInquiry = false;
       this.currentInquiry = null;
     },
-    async confirmDeleteInquiry(id) {
-    const confirmed = window.confirm("정말 이 문의 내역을 삭제하시겠습니까?");
-    if (confirmed) {
-      this.deleteInquiry(id);
-    }
-  },
-  async deleteInquiry(id) {
-    if (!id) {
-      console.error("문의 ID가 올바르지 않습니다.");
-      return;
-    }
-
-    try {
-      await axios.delete(`http://localhost:8083/inquiry/${id}`);
-      this.inquiryItems = this.inquiryItems.filter(item => item.id !== id);
-      this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
-      alert("문의 내역이 성공적으로 삭제되었습니다.");
-    } catch (error) {
-      console.error("문의 내역 삭제 중 오류 발생:", error);
-      alert("문의 내역을 삭제하는 중 오류가 발생했습니다.");
-    }
-  },
+    async confirmDeleteInquiry(id) { // 추가
+      const confirmed = window.confirm("정말 이 문의 내역을 삭제하시겠습니까?");
+      if (confirmed) {
+        this.deleteInquiry(id);
+      }
+    },
+    async deleteInquiry(id) { // 추가
+      try {
+        await axios.delete(`http://localhost:8083/inquiry/${id}`);
+        this.inquiryItems = this.inquiryItems.filter(item => item.id !== id);
+        this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
+        alert("문의 내역이 성공적으로 삭제되었습니다.");
+      } catch (error) {
+        console.error("Error deleting inquiry:", error);
+        alert("문의 내역을 삭제하는 중 오류가 발생했습니다.");
+      }
+    },
     getCategoryStyle(category) {
       switch (category) {
         case '자격증':
