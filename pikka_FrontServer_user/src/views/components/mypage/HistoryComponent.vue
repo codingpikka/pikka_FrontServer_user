@@ -57,24 +57,51 @@
             <template v-else-if="isEditingInquiry">
               <form @submit.prevent="updateInquiry" class="edit-form">
                 <div class="form-group">
-                  <label for="title">제목</label>
+                  <label for="userTitle">제목</label>
                   <input
                     type="text"
-                    v-model="inquiryEditForm.title"
-                    id="title"
+                    v-model="inquiryEditForm.userTitle"
+                    id="userTitle"
                     class="form-control"
                     placeholder="제목을 입력하세요"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="category">카테고리</label>
-                  <input
-                    type="text"
-                    v-model="inquiryEditForm.contactType"
-                    id="category"
+                  <label for="contactType">카테고리</label>
+                    <button
+                      type="button"
+                      class="category-btn"
+                      @click="selectCategory('자격증')"
+                      :style="getButtonStyle('자격증')"
+                    >
+                      자격증
+                    </button>
+                    <button
+                      type="button"
+                      class="category-btn"
+                      @click="selectCategory('취업')"
+                      :style="getButtonStyle('취업')"
+                    >
+                      취업
+                    </button>
+                    <button
+                      type="button"
+                      class="category-btn"
+                      @click="selectCategory('기타')"
+                      :style="getButtonStyle('기타')"
+                    >
+                      기타
+                    </button>
+                    <div style="padding-top: 10px; border-bottom: 0.3px solid gray"></div>
+                </div>
+                <div class="form-group">
+                  <label for="contactContents">내용</label>
+                  <textarea
+                    v-model="inquiryEditForm.contactContents"
+                    id="contactContents"
                     class="form-control"
-                    placeholder="카테고리를 입력하세요"
-                  />
+                    placeholder="내용을 입력하세요"
+                  ></textarea>
                 </div>
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary">수정하기</button>
@@ -83,6 +110,7 @@
               </form>
             </template>
 
+            <!-- 메인 폼 및 데이터 표시 -->
             <template v-else>
               <form role="form" @submit.prevent>
                 <div class="header-buttons">
@@ -154,7 +182,7 @@
                     <div class="info-actions">수정/삭제</div>
                   </div>
 
-                  <div v-for="item in paginatedInquiryItems" :key="item.id" class="info-row">
+                  <div v-for="item in paginatedInquiryItems" :key="item.contactId" class="info-row">
                     <div class="info-title">{{ item.userTitle }}</div>
                     <div class="info-date">{{ item.contactPostedDate }}</div>
                     <div
@@ -167,7 +195,7 @@
                       <button @click="startEditInquiry(item)" class="edit-button">
                         <i class="fa fa-edit"></i>
                       </button>
-                      <button @click="confirmDeleteInquiry(item.id)" class="delete-button">
+                      <button @click="confirmDeleteInquiry(item.contactId)" class="delete-button">
                         <i class="fa fa-trash"></i>
                       </button>
                     </div>
@@ -198,6 +226,7 @@
     </div>
   </section>
 </template>
+
 <script>
 import axios from 'axios';
 import Card from '../../../components/Card.vue';
@@ -212,14 +241,25 @@ export default {
       isEditingInquiry: false, // 추가
       currentPost: null,
       currentInquiry: null, // 추가
+      selectedCategory: "",
       editForm: {
         title: '',
         thumbnail: '',
         content: ''
       },
-      inquiryEditForm: { // 추가
-        title: '',
-        contactType: ''
+      inquiryEditForm: {
+        contactId: '',         // 'contactId' 사용
+        userTitle: '',         // 필드 이름 수정
+        contactType: '',       // 필드 이름 맞춤
+        contactContents: '',   // 추가
+        contactPostedDate: '', // 추가
+        adminId: '',           // 추가
+        adminName: '',         // 추가
+        responseTitle: '',     // 추가
+        responseContents: '',  // 추가
+        responsePostedDate: '',// 추가
+        responseStatus: '',    // 추가
+        answerContent: ''      // 추가
       },
       currentPage: 1,
       itemsPerPage: 5,
@@ -250,25 +290,29 @@ export default {
   methods: {
     async fetchData(button) {
       try {
-        if (button === '작성내역') {
-          const response = await axios.get('http://localhost:8083/api/post');
-          this.data = response.data;
-          this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
-        } else if (button === '문의내역') {
-          const response = await axios.get('http://localhost:8083/inquiry');
-          this.inquiryItems = response.data;
-          this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      if (button === '작성내역') {
+        const response = await axios.get('http://localhost:8083/api/post');
+        this.data = response.data;
+        // ID 값을 기준으로 내림차순 정렬 (ID 값이 큰 것이 먼저 오도록)
+        this.data.sort((a, b) => b.id - a.id);
+        this.totalPages = Math.ceil(this.data.length / this.itemsPerPage);
+      } else if (button === '문의내역') {
+        const response = await axios.get('http://localhost:8083/inquiry');
+        this.inquiryItems = response.data;
+        // ID 값을 기준으로 내림차순 정렬 (ID 값이 큰 것이 먼저 오도록)
+        this.inquiryItems.sort((a, b) => b.contactId - a.contactId);
+        this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
       }
-    },
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  },
     setActiveButton(button) {
       this.activeButton = button;
       this.fetchData(button);
     },
     getTruncatedContent(content) {
-      return content.length > 5 ? content.substring(0, 5) : content;
+      return content.length > 50 ? content.substring(0, 50) + '...' : content;
     },
     startEdit(post) {
       this.isEditing = true;
@@ -307,36 +351,73 @@ export default {
         alert("게시글을 삭제하는 중 오류가 발생했습니다.");
       }
     },
-    startEditInquiry(inquiry) { // 추가
+    startEditInquiry(inquiry) {
       this.isEditingInquiry = true;
       this.currentInquiry = inquiry;
       this.inquiryEditForm = { ...inquiry };
     },
-    async updateInquiry() { // 추가
+    selectCategory(category) {
+      this.selectedCategory = category;
+    },
+    getButtonStyle(category) {
+      const isSelected = this.selectedCategory === category;
+      let baseStyle = `
+        background-color: #f0f0f0;
+        border: 2px solid;
+        color: black;
+      `;
+      switch (category) {
+        case "자격증":
+          baseStyle += " border-color: #21AF71;";
+          if (isSelected) baseStyle += " background-color: #21AF71; color: #fff;";
+          else baseStyle += " color: #21AF71;";
+          break;
+        case "취업":
+          baseStyle += " border-color: #28B1CD;";
+          if (isSelected) baseStyle += " background-color: #28B1CD; color: #fff;";
+          else baseStyle += " color: #28B1CD;";
+          break;
+        case "기타":
+          baseStyle += " border-color: #FF3708;";
+          if (isSelected) baseStyle += " background-color: #FF3708; color: #fff;";
+          else baseStyle += " color: #FF3708;";
+          break;
+      }
+      return baseStyle;
+    },
+    async updateInquiry() {
       try {
-        await axios.put(`http://localhost:8083/inquiry/${this.currentInquiry.id}`, this.inquiryEditForm);
+        // 서버에 PUT 요청으로 문의 내역 업데이트
+        await axios.put(`http://localhost:8083/inquiry/${this.inquiryEditForm.contactId}`, 
+        this.inquiryEditForm);
+
+        // 성공 메시지
         alert('문의 내역이 성공적으로 수정되었습니다.');
+        
+        // 수정 모드 종료
         this.isEditingInquiry = false;
+
+        // 최신 데이터를 가져와 화면에 반영
         this.fetchData(this.activeButton);
       } catch (error) {
         console.error('Error updating inquiry:', error);
         alert('문의 내역을 수정하는 중 오류가 발생했습니다.');
       }
     },
-    cancelEditInquiry() { // 추가
+    cancelEditInquiry() {
       this.isEditingInquiry = false;
       this.currentInquiry = null;
     },
-    async confirmDeleteInquiry(id) { // 추가
+    async confirmDeleteInquiry(id) {
       const confirmed = window.confirm("정말 이 문의 내역을 삭제하시겠습니까?");
       if (confirmed) {
         this.deleteInquiry(id);
       }
     },
-    async deleteInquiry(id) { // 추가
+    async deleteInquiry(id) {
       try {
         await axios.delete(`http://localhost:8083/inquiry/${id}`);
-        this.inquiryItems = this.inquiryItems.filter(item => item.id !== id);
+        this.inquiryItems = this.inquiryItems.filter(item => item.contactId !== id);
         this.totalInquiryPages = Math.ceil(this.inquiryItems.length / this.inquiryItemsPerPage);
         alert("문의 내역이 성공적으로 삭제되었습니다.");
       } catch (error) {
@@ -594,5 +675,52 @@ textarea.form-control {
 
 .btn-secondary:hover {
   background-color: #bbb;
+}
+
+/* 페이지 네이션 컨테이너 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* 페이지 네이션 버튼 스타일 */
+.pagination button {
+  background-color: #3fa2f6;
+  border: 1px solid #3fa2f6;
+  color: white;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 페이지 네이션 버튼 호버 상태 */
+.pagination button:hover {
+  background-color: #3fa2f6;
+  border-color: #3fa2f6;
+}
+
+/* 페이지 네이션 버튼 비활성 상태 */
+.pagination button:disabled {
+  background-color: #e0e0e0;
+  border-color: #e0e0e0;
+  color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+/* 페이지 네이션 페이지 번호 표시 */
+.pagination span {
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+/* 페이지 네이션 버튼 그룹을 포함하는 div 스타일 */
+.pagination div {
+  display: flex;
+  align-items: center;
 }
 </style>
